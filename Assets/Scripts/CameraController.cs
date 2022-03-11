@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static Utilities;
 
 public class CameraController : MonoBehaviour
 {
@@ -23,49 +24,49 @@ public class CameraController : MonoBehaviour
         //mainCamera.transform.position = new Vector3(x, y, -10);
         //mainCamera.orthographicSize = (Utilities.MAX_CAMERA_SIZE + Utilities.MIN_CAMERA_SIZE) / 2;
 
-        mainCamera.transform.position = new Vector3(50 * 1.6f, 50 * 1.6f, -10);
+        mainCamera.transform.position = new Vector3(MAP_SIZE/2 * 1.6f, MAP_SIZE / 2 * 1.6f, -10);
     }
 
     void Update()
     {
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            if (gameObject.transform.position.x < Utilities.MAX_CAMERA_X)
+            if (gameObject.transform.position.x < MAX_CAMERA_X)
             {
-                transform.Translate(new Vector3(Utilities.CAMERA_SPEED * Time.deltaTime, 0, 0));
+                transform.Translate(new Vector3(CAMERA_SPEED * Time.deltaTime, 0, 0));
             }
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            if (gameObject.transform.position.x > Utilities.MIN_CAMERA_X)
+            if (gameObject.transform.position.x > MIN_CAMERA_X)
             {
-                transform.Translate(new Vector3(-Utilities.CAMERA_SPEED * Time.deltaTime, 0, 0));
+                transform.Translate(new Vector3(-CAMERA_SPEED * Time.deltaTime, 0, 0));
             }
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            if (gameObject.transform.position.y > Utilities.MIN_CAMERA_Y)
+            if (gameObject.transform.position.y > MIN_CAMERA_Y)
             {
-                transform.Translate(new Vector3(0, -Utilities.CAMERA_SPEED * Time.deltaTime, 0));
+                transform.Translate(new Vector3(0, -CAMERA_SPEED * Time.deltaTime, 0));
             }
         }
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            if (gameObject.transform.position.y < Utilities.MAX_CAMERA_Y)
+            if (gameObject.transform.position.y < MAX_CAMERA_Y)
             {
-                transform.Translate(new Vector3(0, Utilities.CAMERA_SPEED * Time.deltaTime, 0));
+                transform.Translate(new Vector3(0, CAMERA_SPEED * Time.deltaTime, 0));
             }
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
-            mainCamera.orthographicSize = Mathf.Min(Utilities.MAX_CAMERA_SIZE,
-                mainCamera.orthographicSize + Time.deltaTime * Utilities.CAMERA_ZOOM_SPEED);
+            mainCamera.orthographicSize = Mathf.Min(MAX_CAMERA_SIZE,
+                mainCamera.orthographicSize + Time.deltaTime * CAMERA_ZOOM_SPEED);
         }
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
-            mainCamera.orthographicSize = Mathf.Max(Utilities.MIN_CAMERA_SIZE,
-                mainCamera.orthographicSize - Time.deltaTime * Utilities.CAMERA_ZOOM_SPEED);
+            mainCamera.orthographicSize = Mathf.Max(MIN_CAMERA_SIZE,
+                mainCamera.orthographicSize - Time.deltaTime * CAMERA_ZOOM_SPEED);
         }
 
 
@@ -91,8 +92,8 @@ public class CameraController : MonoBehaviour
             var newY = transform.position.y + (mouseOrigin.y - currentMouse.y);
 
             var newPos = new Vector3(
-                Mathf.Max(Mathf.Min(newX, Utilities.MAX_CAMERA_X), Utilities.MIN_CAMERA_X),
-                Mathf.Max(Mathf.Min(newY, Utilities.MAX_CAMERA_Y), Utilities.MIN_CAMERA_Y),
+                Mathf.Max(Mathf.Min(newX, MAX_CAMERA_X), MIN_CAMERA_X),
+                Mathf.Max(Mathf.Min(newY, MAX_CAMERA_Y), MIN_CAMERA_Y),
                 -10
             );
 
@@ -105,7 +106,7 @@ public class CameraController : MonoBehaviour
 
         if (cameraSnapping)
         {
-            float currentSnap = (Time.time - startSnapTime) * Utilities.CAMERA_SNAP_SPEED;
+            float currentSnap = (Time.time - startSnapTime) * CAMERA_SNAP_SPEED;
             float fractionSnap = currentSnap / snapTotal;
             fractionSnap = Mathf.Min(1f, fractionSnap);
             fractionSnap = Mathf.Max(0f, fractionSnap);

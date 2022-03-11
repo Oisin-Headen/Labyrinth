@@ -2,5 +2,5 @@
 public interface IOccupy
 {
     bool BlocksLOS();
-    void SetHidden(bool hide);
+    void SetRevealed(bool hide);
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using static Utilities;
 
@@ -25,7 +26,7 @@ public class Map
         {
             for (int j = 0; j < MAP_SIZE; j++)
             {
-                if (UnityEngine.Random.Range(1, 11) <= 3)
+                if (UnityEngine.Random.Range(1, 101) <= 30)
                 {
                     setupMap[i, j] = Terrain.wall;
                 }
@@ -97,6 +98,9 @@ public class Map
         var characterModel = new Character(GetSpace(coordinates), this);
         gameController.CreateEntity(coordinates, characterModel);
         GetSpace(coordinates).SetOccupier(characterModel);
+
+        HideAll();
+        characterModel.MoveToSpace(GetSpace(coordinates));
     }
 
     public bool Contains(Coordinate coords)
@@ -114,5 +118,35 @@ public class Map
         {
             return null;
         }
+    }
+
+    public void HideAll()
+    {
+        for (int i = 0; i < MAP_SIZE; i++)
+        {
+            for (int j = 0; j < MAP_SIZE; j++)
+            {
+                map[i,j].SetRevealed(false);
+            }
+        }
+    }
+
+    public HashSet<Space> GetSpacesInRange(Coordinate startSpace, int range)
+    {
+        var spaces = new HashSet<Space>();
+
+        for(var x = startSpace.x - range; x < startSpace.x + range; x++)
+        {
+            for (var y = startSpace.y - range; y < startSpace.y + range; y++)
+            {
+                var space = GetSpace(new Coordinate(x, y));
+                if(space != null)
+                {
+                    spaces.Add(space);
+                }
+            }
+        }
+
+        return spaces;
     }
 }

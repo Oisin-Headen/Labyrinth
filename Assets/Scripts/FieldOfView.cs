@@ -58,36 +58,50 @@ public class FieldOfView
         var line = new ShadowLine();
         var fullShadow = false;
 
-        for (var row = 1; ; row++)
+        var continueRow = true;
+
+        for (var row = 1; continueRow; row++)
         {
             // Stop once we go out of bounds.
             var pos = hero + TransformOctant(row, 0, octant);
-            if (!tiles.Contains(pos)) continue;
-
-            for (var col = 0; col <= row; col++)
+            if (!tiles.Contains(pos))
             {
-                pos = hero + TransformOctant(row, col, octant);
+                continueRow = false;
+            }
+            else
+            {
 
-                // If we've traversed out of bounds, bail on this row.
-                if (!tiles.Contains(pos)) continue;
-
-                if (fullShadow)
+                for (var col = 0; col <= row; col++)
                 {
-                    tiles.GetSpace(pos).SetHidden(true);
-                }
-                else
-                {
-                    var projection = ProjectTile(row, col);
+                    pos = hero + TransformOctant(row, col, octant);
 
-                    // Set the visibility of this tile.
-                    var visible = !line.IsInShadow(projection);
-                    tiles.GetSpace(pos).SetHidden(visible);
-
-                    // Add any opaque tiles to the shadow map.
-                    if (visible && tiles.GetSpace(pos).BlocksLOS())
+                    // If we've traversed out of bounds, bail on this row.
+                    if (!tiles.Contains(pos))
                     {
-                        line.Add(projection);
-                        fullShadow = line.IsFullShadow();
+                        continueRow = false;
+                    }
+                    else
+                    {
+
+                        if (fullShadow)
+                        {
+                            tiles.GetSpace(pos).SetRevealed(false);
+                        }
+                        else
+                        {
+                            var projection = ProjectTile(row, col);
+
+                            // Set the visibility of this tile.
+                            var visible = !line.IsInShadow(projection);
+                            tiles.GetSpace(pos).SetRevealed(visible);
+
+                            // Add any opaque tiles to the shadow map.
+                            if (visible && tiles.GetSpace(pos).BlocksLOS())
+                            {
+                                line.Add(projection);
+                                fullShadow = line.IsFullShadow();
+                            }
+                        }
                     }
                 }
             }
@@ -164,7 +178,7 @@ public class FieldOfView
                 else
                 {
                     // Does not overlap anything, so insert.
-                    shadows.Add(shadow);
+                    shadows.Insert(index, shadow);
                 }
             }
 

@@ -10,6 +10,9 @@ public class Character : IOccupy, IEntityModel
     private readonly Map map;
     private readonly FieldOfView fov;
 
+    // Stat variable;
+    private int viewRange = 10;
+
     private Space currentSpace;
 
     private Queue<CardinalDirection> movePath = new Queue<CardinalDirection>();
@@ -36,7 +39,16 @@ public class Character : IOccupy, IEntityModel
         currentSpace.SetOccupier(null);
         currentSpace = space;
         currentSpace.SetOccupier(this);
-        fov.RefreshVisibility(currentSpace.GetCoordinates());
+        var coords = currentSpace.GetCoordinates();
+        fov.RefreshVisibility(coords);
+        //map.HideAll();
+        //foreach(var spaceInRange in map.GetSpacesInRange(coords, viewRange))
+        //{
+        //    if(Sight.LineOfSight(map, coords, spaceInRange.GetCoordinates()))
+        //    {
+        //        space.SetRevealed(true);
+        //    }
+        //}
     }
 
     public Space GetCurrentSpace()
@@ -73,7 +85,7 @@ public class Character : IOccupy, IEntityModel
         return false;
     }
 
-    public void SetHidden(bool hide)
+    public void SetRevealed(bool hide)
     {
         // Do nothing, should never be hidden
         // view.GetComponent<SpriteRenderer>().enabled = hide;

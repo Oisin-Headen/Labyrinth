@@ -8,6 +8,9 @@ public static class Utilities
 
     public const float TILE_SIZE = 1.6f;
 
+    public static Color SPRITE_DARKEN = new Color(0.7f, 0.7f, 0.7f);
+    public static Color SPRITE_LIGHT = new Color(1, 1, 1);
+
 
     public const float MAX_CAMERA_X = MAP_SIZE * TILE_SIZE;
     public const float MAX_CAMERA_Y = MAP_SIZE * TILE_SIZE;
@@ -17,7 +20,7 @@ public static class Utilities
 
     public const int CAMERA_SPEED = 10;
 
-    public const float MAX_CAMERA_SIZE = 110.0f;
+    public const float MAX_CAMERA_SIZE = 11.0f;
     public const float MIN_CAMERA_SIZE = 2.0f;
 
     public const int CAMERA_ZOOM_SPEED = 15;

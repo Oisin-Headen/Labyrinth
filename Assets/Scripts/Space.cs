@@ -40,13 +40,22 @@ public class Space
         return coordinates;
     }
 
-    public void SetHidden(bool hide)
+    public void SetRevealed(bool seen)
     {
         if(occupier != null)
         {
-            occupier.SetHidden(hide);
+            occupier.SetRevealed(seen);
         }
-        view.GetComponent<SpriteRenderer>().enabled = hide;
+        if (seen)
+        {
+            view.GetComponent<SpriteRenderer>().enabled = true;
+            view.GetComponent<SpriteRenderer>().color = SPRITE_LIGHT;
+        }
+        else
+        {
+            view.GetComponent<SpriteRenderer>().color = SPRITE_DARKEN;
+        }
+
     }
 
     internal bool BlocksLOS()

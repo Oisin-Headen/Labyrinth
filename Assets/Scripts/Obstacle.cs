@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static Utilities;
 
 public class Obstacle : IOccupy
 {
@@ -33,8 +34,16 @@ public class Obstacle : IOccupy
         return true;
     }
 
-    public void SetHidden(bool hide)
+    public void SetRevealed(bool seen)
     {
-        view.GetComponent<SpriteRenderer>().enabled = hide;
+        if (seen)
+        {
+            view.GetComponent<SpriteRenderer>().enabled = true;
+            view.GetComponent<SpriteRenderer>().color = SPRITE_LIGHT;
+        }
+        else
+        {
+            view.GetComponent<SpriteRenderer>().color = SPRITE_DARKEN;
+        }
     }
 }
