@@ -43,4 +43,9 @@ public class GameController : MonoBehaviour
         newEntity.GetComponent<EntityController>().SetModel(model);
         model.SetView(newEntity.GetComponent<EntityController>());
     }
+
+    public Sprite GetDarkFloor()
+    {
+        return Edge;
+    }
 }

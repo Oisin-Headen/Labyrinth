@@ -5,29 +5,14 @@ using static Utilities;
 
 public class FieldOfView
 {
-    public Map tiles;
-
-
-    //public Octant GetOctant()
-    //{
-    //    for (var row = 1; row < maxDistance; row++)
-    //    {
-    //        for (var col = 0; col <= row; col++)
-    //        {
-    //            var x = hero.x + col;
-    //            var y = hero.y - row;
-
-    //            paint(x, y);
-    //        }
-    //    }
-    //}
+    private readonly Map tiles;
 
     public FieldOfView(Map map)
     {
         tiles = map;
     }
 
-    Coordinate TransformOctant(int row, int col, int octant)
+    private Coordinate TransformOctant(int row, int col, int octant)
     {
         switch (octant)
         {
@@ -45,22 +30,23 @@ public class FieldOfView
         return new Coordinate(0, 0);
     }
 
-    public void RefreshVisibility(Coordinate hero)
+    //TODO I want this to return a set of coordinates instead.
+    public void RefreshVisibility(Coordinate hero, int viewRange)
     {
         for (var octant = 0; octant < 8; octant++)
         {
-            RefreshOctant(hero, octant);
+            RefreshOctant(hero, octant, viewRange);
         }
     }
 
-    void RefreshOctant(Coordinate hero, int octant)
+    private void RefreshOctant(Coordinate hero, int octant, int viewRange)
     {
         var line = new ShadowLine();
         var fullShadow = false;
 
         var continueRow = true;
 
-        for (var row = 1; continueRow; row++)
+        for (var row = 1; row <= viewRange && continueRow; row++)
         {
             // Stop once we go out of bounds.
             var pos = hero + TransformOctant(row, 0, octant);
@@ -108,13 +94,7 @@ public class FieldOfView
         }
     }
 
-    // not sure what this is for
-    //  for (var col = 0; col <= row; col++) {
-    //var projection = _projectTile(row, col);
-    //  var pos = start + transformOctant(row, col, octant);
-    //  tiles[pos].isVisible = !line.isInShadow(projection);
-
-    class ShadowLine
+    private class ShadowLine
     {
         readonly List<Shadow> shadows = new List<Shadow>();
 
@@ -191,7 +171,7 @@ public class FieldOfView
         }
 
     }
-    class Shadow
+    private class Shadow
     {
         internal float start;
         internal float end;
@@ -208,7 +188,7 @@ public class FieldOfView
         }
     }
 
-    Shadow ProjectTile(float row, float col)
+    private Shadow ProjectTile(float row, float col)
     {
         var topLeft = col / (row + 2);
         var bottomRight = (col + 1) / (row + 1);

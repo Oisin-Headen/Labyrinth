@@ -40,7 +40,7 @@ public class Character : IOccupy, IEntityModel
         currentSpace = space;
         currentSpace.SetOccupier(this);
         var coords = currentSpace.GetCoordinates();
-        fov.RefreshVisibility(coords);
+        fov.RefreshVisibility(coords, viewRange);
         //map.HideAll();
         //foreach(var spaceInRange in map.GetSpacesInRange(coords, viewRange))
         //{

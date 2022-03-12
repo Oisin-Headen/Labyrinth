@@ -9,46 +9,34 @@ public class Map
 
     private readonly Space[,] map;
 
-    private enum Terrain
+    public enum Terrain
     {
-        empty, wall, hard_wall, edge
+        NOT_SETUP, empty, wall, hard_wall, edge, dark_floor
     }
 
     public Map(GameController gameController)
     {
         this.gameController = gameController;
 
-        Terrain[,] setupMap = new Terrain[MAP_SIZE, MAP_SIZE];
+        Terrain[,] setupMap =  MapGenerator.CreateMap();
         map = new Space[MAP_SIZE, MAP_SIZE];
 
-        // create the template for the map
-        for (int i = 0; i < MAP_SIZE; i++)
-        {
-            for (int j = 0; j < MAP_SIZE; j++)
-            {
-                if (UnityEngine.Random.Range(1, 101) <= 30)
-                {
-                    setupMap[i, j] = Terrain.wall;
-                }
-                else
-                {
-                    setupMap[i, j] = Terrain.empty;
-                }
-            }
-        }
-
         // create the map, and fill it with objects
-        for (int i = 0; i < MAP_SIZE; i++)
+        for (int y = 0; y < MAP_SIZE; y++)
         {
-            for (int j = 0; j < MAP_SIZE; j++)
+            for (int x = 0; x < MAP_SIZE; x++)
             {
-                var newTile = gameController.CreateTile(i, j);
-                map[i, j] = new Space(newTile, new Coordinate(i, j));
+                var newTile = gameController.CreateTile(x, y);
+                map[y, x] = new Space(newTile, new Coordinate(x, y));
 
-                if(setupMap[i,j] == Terrain.wall)
+                if(setupMap[y,x] == Terrain.wall)
                 {
-                    var newObject = gameController.CreateObstacle(i, j);
-                    map[i, j].SetOccupier(new Obstacle(newObject, map[i, j]));
+                    var newObject = gameController.CreateObstacle(x, y);
+                    map[y, x].SetOccupier(new Obstacle(newObject, map[y, x]));
+                }
+                else if(setupMap[y,x] == Terrain.dark_floor)
+                {
+                    map[y, x].GetView().GetComponent<SpriteRenderer>().sprite = gameController.GetDarkFloor();
                 }
             }
         }
@@ -112,7 +100,7 @@ public class Map
     {
         try
         {
-            return map[currentCoords.x, currentCoords.y];
+            return map[currentCoords.y, currentCoords.x];
         }
         catch (IndexOutOfRangeException)
         {
@@ -135,11 +123,11 @@ public class Map
     {
         var spaces = new HashSet<Space>();
 
-        for(var x = startSpace.x - range; x < startSpace.x + range; x++)
+        for(var y = startSpace.y - range; y < startSpace.y + range; y++)
         {
-            for (var y = startSpace.y - range; y < startSpace.y + range; y++)
+            for (var x = startSpace.x - range; x < startSpace.x + range; x++)
             {
-                var space = GetSpace(new Coordinate(x, y));
+                var space = GetSpace(new Coordinate(y, x));
                 if(space != null)
                 {
                     spaces.Add(space);
