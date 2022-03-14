@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EntityController : MonoBehaviour
 {
-    private IEntityModel model;
+    private IAmAnEntity model;
 
     private bool moving = false;
 
@@ -12,7 +12,7 @@ public class EntityController : MonoBehaviour
     private float startTime;
     private float distance;
 
-    public void SetModel(IEntityModel model)
+    public void SetModel(IAmAnEntity model)
     {
         this.model = model;
     }

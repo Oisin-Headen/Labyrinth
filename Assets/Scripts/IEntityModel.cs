@@ -1,5 +1,5 @@
 ﻿using System;
-public interface IEntityModel
+public interface IAmAnEntity
 {
     public void MoveReady();
     public void QueueMove(Utilities.CardinalDirection direction);

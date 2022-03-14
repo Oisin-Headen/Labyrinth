@@ -76,7 +76,7 @@ public static class MapGenerator
         }
 
 
-        for (int y = 0; y < MAP_SIZE/2; ++y)
+        for (int y = 0; y < MAP_SIZE / 2; ++y)
         {
             int topleftY = y * 2;
             for (int x = 0; x < MAP_SIZE / 2; x++)
@@ -85,7 +85,7 @@ public static class MapGenerator
                 bool blockedAbove = (grid[y, x] & directionValues[CardinalDirection.Up]) != directionValues[CardinalDirection.Up];
                 bool blockedLeft = (grid[y, x] & directionValues[CardinalDirection.Left]) != directionValues[CardinalDirection.Left];
 
-                bool blockAbove = y - 1 > 0 && (grid[y-1, x] & directionValues[CardinalDirection.Left]) != directionValues[CardinalDirection.Left];
+                bool blockAbove = y - 1 > 0 && (grid[y - 1, x] & directionValues[CardinalDirection.Left]) != directionValues[CardinalDirection.Left];
                 bool blockLeft = x - 1 > 0 && (grid[y, x - 1] & directionValues[CardinalDirection.Up]) != directionValues[CardinalDirection.Up];
 
 
@@ -95,6 +95,10 @@ public static class MapGenerator
                 setupMap[topleftY + 1, topleftX + 1] = Terrain.empty;
             }
         }
+
+         //TODO empty map for testing
+        setupMap = CreateEmptyMap();
+
         return setupMap;
     }
 
@@ -108,6 +112,19 @@ public static class MapGenerator
         {
             return UnityEngine.Random.Range(0, max);
         }
+    }
+
+    private static Terrain[,] CreateEmptyMap()
+    {
+        var map = new Terrain[MAP_SIZE, MAP_SIZE];
+        for (int y = 0; y < MAP_SIZE; y++)
+        {
+            for (int x = 0; x < MAP_SIZE; x++)
+            {
+                map[y, x] = Terrain.empty;
+            }           
+        }
+        return map;
     }
 }
 

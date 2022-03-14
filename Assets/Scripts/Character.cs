@@ -4,24 +4,24 @@ using System;
 using System.Collections.Generic;
 using static Utilities;
 
-public class Character : IOccupy, IEntityModel
+public class Character : IOccupy, IAmAnEntity, IViewSpaces
 {
     private EntityController view;
     private readonly Map map;
-    private readonly FieldOfView fov;
+    private ISet<Space> spacesInView = new HashSet<Space>();
 
+    // TODO Characters should be expanded, with a Stat class and a 'Class' class.
     // Stat variable;
-    private int viewRange = 10;
+    private int viewRange = 5;
 
     private Space currentSpace;
 
-    private Queue<CardinalDirection> movePath = new Queue<CardinalDirection>();
+    private readonly Queue<CardinalDirection> movePath = new Queue<CardinalDirection>();
 
     public Character(Space space, Map map)
     {
         this.map = map;
         currentSpace = space;
-        fov = new FieldOfView(map);
     }
 
     public void SetView(EntityController view)
@@ -40,15 +40,19 @@ public class Character : IOccupy, IEntityModel
         currentSpace = space;
         currentSpace.SetOccupier(this);
         var coords = currentSpace.GetCoordinates();
-        fov.RefreshVisibility(coords, viewRange);
-        //map.HideAll();
-        //foreach(var spaceInRange in map.GetSpacesInRange(coords, viewRange))
-        //{
-        //    if(Sight.LineOfSight(map, coords, spaceInRange.GetCoordinates()))
-        //    {
-        //        space.SetRevealed(true);
-        //    }
-        //}
+
+
+        foreach(var oldSpaceInView in spacesInView)
+        {
+            oldSpaceInView.RemoveViewer(this);
+        }
+        spacesInView = FieldOfView.GetAllSpacesInSightRange(map, coords, viewRange);
+        spacesInView.Add(currentSpace);
+
+        foreach (var newSpaceInView in spacesInView)
+        {
+            newSpaceInView.AddViewer(this);
+        }
     }
 
     public Space GetCurrentSpace()

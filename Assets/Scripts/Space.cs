@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using static Utilities;
 
@@ -8,6 +9,8 @@ public class Space
     private readonly Coordinate coordinates;
 
     private IOccupy occupier;
+
+    private ISet<IViewSpaces> viewers = new HashSet<IViewSpaces>();
 
     public Space(GameObject view, Coordinate coordinates)
     {
@@ -40,7 +43,7 @@ public class Space
         return coordinates;
     }
 
-    public void SetRevealed(bool seen)
+    private void SetRevealed(bool seen)
     {
         if(occupier != null)
         {
@@ -58,7 +61,21 @@ public class Space
 
     }
 
-    internal bool BlocksLOS()
+    public void AddViewer(IViewSpaces viewer)
+    {
+        viewers.Add(viewer);
+        SetRevealed(true);
+    }
+    public void RemoveViewer(IViewSpaces viewer)
+    {
+        viewers.Remove(viewer);
+        if(viewers.Count == 0)
+        {
+            SetRevealed(false);
+        }
+    }
+
+    public bool BlocksLOS()
     {
         return !(IsEmpty() || !occupier.BlocksLOS()); ;
     }

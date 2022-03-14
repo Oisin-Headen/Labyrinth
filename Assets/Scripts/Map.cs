@@ -87,7 +87,6 @@ public class Map
         gameController.CreateEntity(coordinates, characterModel);
         GetSpace(coordinates).SetOccupier(characterModel);
 
-        HideAll();
         characterModel.MoveToSpace(GetSpace(coordinates));
     }
 
@@ -108,16 +107,17 @@ public class Map
         }
     }
 
-    public void HideAll()
-    {
-        for (int i = 0; i < MAP_SIZE; i++)
-        {
-            for (int j = 0; j < MAP_SIZE; j++)
-            {
-                map[i,j].SetRevealed(false);
-            }
-        }
-    }
+    // TODO: this was a test method, it doesn't work now. I'm leaving it in case I need it again.
+    //public void HideAll()
+    //{
+    //    for (int i = 0; i < MAP_SIZE; i++)
+    //    {
+    //        for (int j = 0; j < MAP_SIZE; j++)
+    //        {
+    //            map[i,j].SetRevealed(false);
+    //        }
+    //    }
+    //}
 
     public HashSet<Space> GetSpacesInRange(Coordinate startSpace, int range)
     {

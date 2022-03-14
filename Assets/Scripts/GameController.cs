@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
         return Instantiate(Obstacle, new Vector3(xPos * Utilities.TILE_SIZE, yPos * Utilities.TILE_SIZE), Quaternion.identity, MapHolder.transform);
     }
 
-    public void CreateEntity(Utilities.Coordinate coordinates, IEntityModel model)
+    public void CreateEntity(Utilities.Coordinate coordinates, IAmAnEntity model)
     {
         var newEntity =  Instantiate(Entity, new Vector3(coordinates.x * Utilities.TILE_SIZE, coordinates.y * Utilities.TILE_SIZE), Quaternion.identity);
         newEntity.GetComponent<EntityController>().SetModel(model);
