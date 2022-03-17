@@ -5,19 +5,15 @@ using static Utilities;
 
 public class Map
 {
-    private readonly GameController gameController;
-
     private readonly Space[,] map;
 
     public enum Terrain
     {
-        NOT_SETUP, empty, wall, hard_wall, edge, dark_floor
+        NOT_SETUP, empty, wall, hard_wall, edge
     }
 
     public Map(GameController gameController)
     {
-        this.gameController = gameController;
-
         Terrain[,] setupMap =  MapGenerator.CreateMap();
         map = new Space[MAP_SIZE, MAP_SIZE];
 
@@ -26,23 +22,20 @@ public class Map
         {
             for (int x = 0; x < MAP_SIZE; x++)
             {
-                var newTile = gameController.CreateTile(x, y);
+                var newTile = gameController.CreateTileView(x, y);
                 map[y, x] = new Space(newTile, new Coordinate(x, y));
 
                 if(setupMap[y,x] == Terrain.wall)
                 {
-                    var newObject = gameController.CreateObstacle(x, y);
+                    var newObject = gameController.CreateObstacleView(x, y);
                     map[y, x].Occupier = new Obstacle(newObject, map[y, x]);
-                }
-                else if(setupMap[y,x] == Terrain.dark_floor)
-                {
-                    map[y, x].GetView().GetComponent<SpriteRenderer>().sprite = gameController.GetDarkFloor();
                 }
             }
         }
+    }
 
-        // create the player in the middle
-
+    public Coordinate GetSpawnLocation()
+    {
         Coordinate coordinates = new Coordinate() { x = MAP_SIZE / 2, y = MAP_SIZE / 2 };
         var currentDirection = CardinalDirection.Up;
         int currentLength = 1, currentSteps = 0;
@@ -68,12 +61,7 @@ public class Map
                 }
             }
         }
-
-        var characterModel = new Character(GetSpace(coordinates), this);
-        gameController.CreateEntity(coordinates, characterModel);
-        GetSpace(coordinates).Occupier = characterModel;
-
-        characterModel.MoveToSpace(GetSpace(coordinates));
+        return coordinates;
     }
 
     public bool Contains(Coordinate coords)

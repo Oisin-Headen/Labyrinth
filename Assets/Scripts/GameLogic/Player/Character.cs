@@ -47,6 +47,7 @@ public class Character : IOccupy, IAmAnEntity, IViewSpaces
             oldSpaceInView.RemoveViewer(this);
         }
         spacesInView = FieldOfView.GetAllSpacesInSightRange(map, coords, viewRange);
+        spacesInView.IntersectWith(Dijkstras.GetSpacesInRange(map, coords, viewRange, true).Keys);
         spacesInView.Add(currentSpace);
 
         foreach (var newSpaceInView in spacesInView)

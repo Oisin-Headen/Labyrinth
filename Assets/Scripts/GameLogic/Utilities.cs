@@ -10,6 +10,8 @@ public static class Utilities
 
     public static Color SPRITE_DARKEN = new Color(0.7f, 0.7f, 0.7f);
     public static Color SPRITE_LIGHT = new Color(1, 1, 1);
+    public static Color SPRITE_MOVE = new Color(0.5f, 0.5f, 1);
+    public static Color SPRITE_MOVE_SELECTED = new Color(0.7f, 0.7f, 1);
 
 
     public const float MAX_CAMERA_X = MAP_SIZE * TILE_SIZE;
@@ -72,18 +74,13 @@ public static class Utilities
 
     public static CardinalDirection SpiralDirectionClockwise(this CardinalDirection direction)
     {
-        switch (direction)
+        return direction switch
         {
-            case CardinalDirection.Up:
-                return CardinalDirection.Right;
-            case CardinalDirection.Right:
-                return CardinalDirection.Down;
-            case CardinalDirection.Down:
-                return CardinalDirection.Left;
-            case CardinalDirection.Left:
-                return CardinalDirection.Up;
-            default:
-                return direction;
-        }
+            CardinalDirection.Up => CardinalDirection.Right,
+            CardinalDirection.Right => CardinalDirection.Down,
+            CardinalDirection.Down => CardinalDirection.Left,
+            CardinalDirection.Left => CardinalDirection.Up,
+            _ => direction,
+        };
     }
 }

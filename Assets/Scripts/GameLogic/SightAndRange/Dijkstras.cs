@@ -5,10 +5,13 @@ using static Utilities;
 
 public static class Dijkstras
 {
-    public static readonly int ONE_SPACE = 10, DIAGONAL_SPACE_INCREASE = 4, IMPASSIBLE = -1;
+    private static readonly int ONE_SPACE = 10, DIAGONAL_SPACE_INCREASE = 5;
 
     public static IDictionary<Space, (IList<Space>, int)> GetSpacesInRange(Map map, Coordinate startSpace, int maxCost, bool ignoreImpassible)
     {
+        // increase the max cost, to allow for the variable cost to move to diagonal spaces.
+        maxCost *= 10;
+
         var nodes = new Dictionary<Space, DijkstrasNode>();
         var currentSpace = map.GetSpace(startSpace);
 
@@ -46,10 +49,13 @@ public static class Dijkstras
                     newNodeCost += DIAGONAL_SPACE_INCREASE;
                 }
 
-                // never seen before, create node, if the current node is below the max cost
-                if (!nodes.ContainsKey(space) && nodes[currentSpace].Cost < maxCost)
+                // never seen before, create node if the current node is below the max cost
+                if (!nodes.ContainsKey(space))
                 {
-                    nodes.Add(space, new DijkstrasNode(space, newNodeCost, nodes[currentSpace]));
+                    if (nodes[currentSpace].Cost < maxCost)
+                    {
+                        nodes.Add(space, new DijkstrasNode(space, newNodeCost, nodes[currentSpace]));
+                    }
                 }
                 // node already exists, update it
                 else

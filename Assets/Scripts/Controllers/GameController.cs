@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -17,35 +14,42 @@ public class GameController : MonoBehaviour
     public Sprite Edge;
 
 
-    private Map map;
-
-
+    private Player player;
 
     // Start is called before the first frame update
     void Start()
     {
-        map = new Map(this);
+        var map = new Map(this);
+        player = new Player(map, this);
     }
 
-    public GameObject CreateTile(int xPos, int yPos)
+    public GameObject CreateTileView(int xPos, int yPos)
     {
         return Instantiate(Tile, new Vector3(xPos * Utilities.TILE_SIZE, yPos * Utilities.TILE_SIZE), Quaternion.identity, MapHolder.transform);
     }
 
-    public GameObject CreateObstacle(int xPos, int yPos)
+    public GameObject CreateObstacleView(int xPos, int yPos)
     {
         return Instantiate(Obstacle, new Vector3(xPos * Utilities.TILE_SIZE, yPos * Utilities.TILE_SIZE), Quaternion.identity, MapHolder.transform);
     }
 
     public void CreateEntity(Utilities.Coordinate coordinates, IAmAnEntity model)
     {
-        var newEntity =  Instantiate(Entity, new Vector3(coordinates.x * Utilities.TILE_SIZE, coordinates.y * Utilities.TILE_SIZE), Quaternion.identity);
+        var newEntity = Instantiate(Entity, new Vector3(coordinates.x * Utilities.TILE_SIZE, coordinates.y * Utilities.TILE_SIZE), Quaternion.identity);
         newEntity.GetComponent<EntityController>().SetModel(model);
         model.SetView(newEntity.GetComponent<EntityController>());
     }
 
-    public Sprite GetDarkFloor()
+    public void Update()
     {
-        return Edge;
+        if (Input.GetKeyUp(KeyCode.M))
+        {
+            Move();
+        }
+    }
+
+    public void Move()
+    {
+        player.Move();
     }
 }

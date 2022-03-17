@@ -159,7 +159,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 812ad2386aa2745c99868289c089f67a, type: 3}
+  m_Script: {fileID: 11500000, guid: c6c3e93a4f2b64bcb85bc160d0478e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 519420031}
@@ -261,7 +261,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 823870875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0151c54753514673893b53f00352d69, type: 3}
+  m_Script: {fileID: 11500000, guid: eacaf8dfc435e43df8c559fcbe2e7578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Tile: {fileID: 6330866534948700878, guid: 10dacebd7f9c24bd1b6b9f68498f1d9c, type: 3}
