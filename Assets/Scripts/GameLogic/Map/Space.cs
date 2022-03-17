@@ -6,9 +6,9 @@ using static Utilities;
 public class Space
 {
     private readonly GameObject view;
-    private readonly Coordinate coordinates;
+    public readonly Coordinate coordinates;
 
-    private IOccupy occupier;
+    public IOccupy Occupier { get; set; }
 
     private ISet<IViewSpaces> viewers = new HashSet<IViewSpaces>();
 
@@ -23,31 +23,16 @@ public class Space
         return view;
     }
 
-    public void SetOccupier(IOccupy occupier)
-    {
-        this.occupier = occupier;
-    }
-
-    public IOccupy GetOccupier()
-    {
-        return occupier;
-    }
-
     public bool IsEmpty()
     {
-        return occupier == null;
-    }
-
-    public Coordinate GetCoordinates()
-    {
-        return coordinates;
+        return Occupier == null;
     }
 
     private void SetRevealed(bool seen)
     {
-        if(occupier != null)
+        if(Occupier != null)
         {
-            occupier.SetRevealed(seen);
+            Occupier.SetRevealed(seen);
         }
         if (seen)
         {
@@ -77,6 +62,6 @@ public class Space
 
     public bool BlocksLOS()
     {
-        return !(IsEmpty() || !occupier.BlocksLOS()); ;
+        return !(IsEmpty() || !Occupier.BlocksLOS()); ;
     }
 }

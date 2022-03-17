@@ -32,7 +32,7 @@ public class Map
                 if(setupMap[y,x] == Terrain.wall)
                 {
                     var newObject = gameController.CreateObstacle(x, y);
-                    map[y, x].SetOccupier(new Obstacle(newObject, map[y, x]));
+                    map[y, x].Occupier = new Obstacle(newObject, map[y, x]);
                 }
                 else if(setupMap[y,x] == Terrain.dark_floor)
                 {
@@ -58,34 +58,20 @@ public class Map
             }
             else
             {
-                coordinates = coordinates.GetCoordinateInDiection(currentDirection);
+                coordinates = coordinates.GetCoordinateInDirection(currentDirection);
                 currentSteps++;
                 if (currentSteps == currentLength)
                 {
                     currentLength++;
                     currentSteps = 0;
-                    switch (currentDirection)
-                    {
-                        case CardinalDirection.Up:
-                            currentDirection = CardinalDirection.Right;
-                            break;
-                        case CardinalDirection.Right:
-                            currentDirection = CardinalDirection.Down;
-                            break;
-                        case CardinalDirection.Down:
-                            currentDirection = CardinalDirection.Left;
-                            break;
-                        case CardinalDirection.Left:
-                            currentDirection = CardinalDirection.Up;
-                            break;
-                    }
+                    currentDirection = currentDirection.SpiralDirectionClockwise();
                 }
             }
         }
 
         var characterModel = new Character(GetSpace(coordinates), this);
         gameController.CreateEntity(coordinates, characterModel);
-        GetSpace(coordinates).SetOccupier(characterModel);
+        GetSpace(coordinates).Occupier = characterModel;
 
         characterModel.MoveToSpace(GetSpace(coordinates));
     }

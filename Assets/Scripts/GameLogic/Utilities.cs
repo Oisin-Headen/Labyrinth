@@ -48,26 +48,42 @@ public static class Utilities
             return new Coordinate(a.x + b.x, a.y + b.y);
         }
     }
-
     
 
-    public static Coordinate GetCoordinateInDiection(this Coordinate coordinate, CardinalDirection direction)
+    public static Coordinate GetCoordinateInDirection(this Coordinate coordinate, CardinalDirection direction)
     {
         switch (direction)
         {
-            case Utilities.CardinalDirection.Up:
+            case CardinalDirection.Up:
                 coordinate.y++;
                 break;
-            case Utilities.CardinalDirection.Left:
+            case CardinalDirection.Left:
                 coordinate.x--;
                 break;
-            case Utilities.CardinalDirection.Down:
+            case CardinalDirection.Down:
                 coordinate.y--;
                 break;
-            case Utilities.CardinalDirection.Right:
+            case CardinalDirection.Right:
                 coordinate.x++;
                 break;
         }
         return coordinate;
+    }
+
+    public static CardinalDirection SpiralDirectionClockwise(this CardinalDirection direction)
+    {
+        switch (direction)
+        {
+            case CardinalDirection.Up:
+                return CardinalDirection.Right;
+            case CardinalDirection.Right:
+                return CardinalDirection.Down;
+            case CardinalDirection.Down:
+                return CardinalDirection.Left;
+            case CardinalDirection.Left:
+                return CardinalDirection.Up;
+            default:
+                return direction;
+        }
     }
 }

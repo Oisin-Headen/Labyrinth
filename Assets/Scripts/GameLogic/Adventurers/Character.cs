@@ -36,10 +36,10 @@ public class Character : IOccupy, IAmAnEntity, IViewSpaces
 
     public void MoveToSpace(Space space)
     {
-        currentSpace.SetOccupier(null);
+        currentSpace.Occupier = null;
         currentSpace = space;
-        currentSpace.SetOccupier(this);
-        var coords = currentSpace.GetCoordinates();
+        currentSpace.Occupier = this;
+        var coords = currentSpace.coordinates;
 
 
         foreach(var oldSpaceInView in spacesInView)
@@ -72,7 +72,7 @@ public class Character : IOccupy, IAmAnEntity, IViewSpaces
             return;
         }
 
-        var newCoords = currentSpace.GetCoordinates().GetCoordinateInDiection(movePath.Dequeue());
+        var newCoords = currentSpace.coordinates.GetCoordinateInDirection(movePath.Dequeue());
         Space newSpace = map.GetSpace(newCoords);
 
         if(newSpace == null || !newSpace.IsEmpty())

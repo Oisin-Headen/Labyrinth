@@ -23,7 +23,6 @@ public static class FieldOfView
         return new Coordinate(0, 0);
     }
 
-    //TODO I want this to return a set of coordinates instead.
     public static ISet<Space> GetAllSpacesInSightRange(Map tiles, Coordinate startCoordinates, int viewRange)
     {
         ISet<Space> spaces = new HashSet<Space>();
