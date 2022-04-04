@@ -4,41 +4,24 @@ using System;
 using System.Collections.Generic;
 using static Utilities;
 
-public class Character : IOccupy, IAmAnEntity, IViewSpaces
+public class Character : AbstractEntity, IOccupy, IAmAnEntity, IViewSpaces
 {
-    private EntityController view;
-    private readonly Map map;
     private ISet<Space> spacesInView = new HashSet<Space>();
 
     // TODO Characters should be expanded, with a Stat class and a 'Class' class.
     // Stat variable;
+
     private int viewRange = 5;
 
-    private Space currentSpace;
 
-    private readonly Queue<CardinalDirection> movePath = new Queue<CardinalDirection>();
-
-    public Character(Space space, Map map)
+    public Character(Space space, Map map) : base (map)
     {
-        this.map = map;
         currentSpace = space;
     }
 
-    public void SetView(EntityController view)
+    public override void MoveToSpace(Space space)
     {
-        this.view = view;
-    }
-
-    public EntityController GetView()
-    {
-        return view;
-    }
-
-    public void MoveToSpace(Space space)
-    {
-        currentSpace.Occupier = null;
-        currentSpace = space;
-        currentSpace.Occupier = this;
+        base.MoveToSpace(space);
         var coords = currentSpace.coordinates;
 
 
@@ -56,43 +39,12 @@ public class Character : IOccupy, IAmAnEntity, IViewSpaces
         }
     }
 
-    public Space GetCurrentSpace()
-    {
-        return currentSpace;
-    }
+    
 
-    public void QueueMove(CardinalDirection direction)
-    {
-        movePath.Enqueue(direction);
-    }
-
-    public void MoveReady()
-    {
-        if(movePath.Count == 0)
-        {
-            return;
-        }
-
-        var newCoords = currentSpace.coordinates.GetCoordinateInDirection(movePath.Dequeue());
-        Space newSpace = map.GetSpace(newCoords);
-
-        if(newSpace == null || !newSpace.IsEmpty())
-        {
-            return;
-        }
-
-        MoveToSpace(newSpace);
-        view.MoveTo(newSpace.GetView());
-    }
-
-    public bool BlocksLOS()
+    public override bool BlocksLOS()
     {
         return false;
     }
 
-    public void SetRevealed(bool hide)
-    {
-        // Do nothing, should never be hidden
-        // view.GetComponent<SpriteRenderer>().enabled = hide;
-    }
+    
 }

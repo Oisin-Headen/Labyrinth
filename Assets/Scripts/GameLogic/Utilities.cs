@@ -4,7 +4,11 @@ using UnityEngine;
 
 public static class Utilities
 {
-    public const int MAP_SIZE = 100;
+    public const int MAP_SIZE = 102;
+    // Must be divided equally
+    public const int SETUP_MAP_DIVISOR = 3;
+    public const int SETUP_MAP_SIZE = MAP_SIZE / SETUP_MAP_DIVISOR;
+
 
     public const float TILE_SIZE = 1.6f;
 

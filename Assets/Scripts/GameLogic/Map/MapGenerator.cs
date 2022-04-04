@@ -41,10 +41,10 @@ public static class MapGenerator
 
 
         Terrain[,] setupMap = new Terrain[MAP_SIZE, MAP_SIZE];
-        int[,] grid = new int[MAP_SIZE / 2, MAP_SIZE / 2];
+        int[,] grid = new int[SETUP_MAP_SIZE, SETUP_MAP_SIZE];
 
-        int firstX = UnityEngine.Random.Range(1, MAP_SIZE / 2);
-        int firstY = UnityEngine.Random.Range(1, MAP_SIZE / 2);
+        int firstX = UnityEngine.Random.Range(1, SETUP_MAP_SIZE);
+        int firstY = UnityEngine.Random.Range(1, SETUP_MAP_SIZE);
         List<Coordinate> list = new List<Coordinate>() { new Coordinate(firstX, firstY) };
 
         Random random = new Random();
@@ -59,7 +59,7 @@ public static class MapGenerator
             {
                 int newX = chosenSpace.x + DX[direction];
                 int newY = chosenSpace.y + DY[direction];
-                if (newX >= 0 && newY >= 0 && newX < MAP_SIZE / 2 && newY < MAP_SIZE / 2 && grid[newY, newX] == 0)
+                if (newX >= 0 && newY >= 0 && newX < SETUP_MAP_SIZE && newY < SETUP_MAP_SIZE && grid[newY, newX] == 0)
                 {
                     grid[chosenSpace.y, chosenSpace.x] |= directionValues[direction];
                     grid[newY, newX] |= directionValues[OPPOSITE[direction]];
@@ -76,12 +76,12 @@ public static class MapGenerator
         }
 
 
-        for (int y = 0; y < MAP_SIZE / 2; ++y)
+        for (int y = 0; y < SETUP_MAP_SIZE; ++y)
         {
-            int topleftY = y * 2;
-            for (int x = 0; x < MAP_SIZE / 2; x++)
+            int topleftY = y * SETUP_MAP_DIVISOR;
+            for (int x = 0; x < SETUP_MAP_SIZE; x++)
             {
-                int topleftX = x * 2;
+                int topleftX = x * SETUP_MAP_DIVISOR;
                 bool blockedAbove = (grid[y, x] & directionValues[CardinalDirection.Up]) != directionValues[CardinalDirection.Up];
                 bool blockedLeft = (grid[y, x] & directionValues[CardinalDirection.Left]) != directionValues[CardinalDirection.Left];
 
@@ -90,14 +90,25 @@ public static class MapGenerator
 
 
                 setupMap[topleftY, topleftX] = blockedAbove || blockedLeft || blockAbove || blockLeft ? Terrain.wall : Terrain.empty;
+
                 setupMap[topleftY, topleftX + 1] = blockedAbove ? Terrain.wall : Terrain.empty;
+                setupMap[topleftY, topleftX + 2] = blockedAbove ? Terrain.wall : Terrain.empty;
                 setupMap[topleftY + 1, topleftX] = blockedLeft ? Terrain.wall : Terrain.empty;
+                setupMap[topleftY + 2, topleftX] = blockedLeft ? Terrain.wall : Terrain.empty;
+
+
+
                 setupMap[topleftY + 1, topleftX + 1] = Terrain.empty;
+                setupMap[topleftY + 1, topleftX + 2] = Terrain.empty;
+                setupMap[topleftY + 2, topleftX + 1] = Terrain.empty;
+                setupMap[topleftY + 2, topleftX + 2] = Terrain.empty;
             }
         }
 
          //TODO empty map for testing
         //setupMap = CreateEmptyMap();
+
+
 
         return setupMap;
     }

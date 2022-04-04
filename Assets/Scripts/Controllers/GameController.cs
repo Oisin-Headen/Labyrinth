@@ -7,13 +7,9 @@ public class GameController : MonoBehaviour
     public GameObject Entity;
 
     public GameObject MapHolder;
+    public GameSprites Sprites;
 
-    public Sprite Wall;
-    public Sprite Floor;
-    public Sprite Hard_wall;
-    public Sprite Edge;
-
-
+    public PlayerController playerController;
     private Player player;
 
     // Start is called before the first frame update
@@ -21,6 +17,7 @@ public class GameController : MonoBehaviour
     {
         var map = new Map(this);
         player = new Player(map, this);
+        playerController.player = player;
     }
 
     public GameObject CreateTileView(int xPos, int yPos)
@@ -37,19 +34,6 @@ public class GameController : MonoBehaviour
     {
         var newEntity = Instantiate(Entity, new Vector3(coordinates.x * Utilities.TILE_SIZE, coordinates.y * Utilities.TILE_SIZE), Quaternion.identity);
         newEntity.GetComponent<EntityController>().SetModel(model);
-        model.SetView(newEntity.GetComponent<EntityController>());
-    }
-
-    public void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.M))
-        {
-            Move();
-        }
-    }
-
-    public void Move()
-    {
-        player.Move();
+        model.View = newEntity.GetComponent<EntityController>();
     }
 }

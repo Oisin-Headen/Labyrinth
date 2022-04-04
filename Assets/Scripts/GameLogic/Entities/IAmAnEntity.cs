@@ -1,7 +1,8 @@
 ﻿using System;
-public interface IAmAnEntity
+public interface IAmAnEntity : IOccupy
 {
     public void MoveReady();
     public void QueueMove(Utilities.CardinalDirection direction);
-    public void SetView(EntityController controller);
+
+    public EntityController View { get; set; }
 }

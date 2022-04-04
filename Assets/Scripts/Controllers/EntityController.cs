@@ -21,23 +21,6 @@ public class EntityController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.W))
-        {
-            model.QueueMove(Utilities.CardinalDirection.Up);
-        }
-        if (Input.GetKeyUp(KeyCode.A))
-        {
-            model.QueueMove(Utilities.CardinalDirection.Left);
-        }
-        if (Input.GetKeyUp(KeyCode.S))
-        {
-            model.QueueMove(Utilities.CardinalDirection.Down);
-        }
-        if (Input.GetKeyUp(KeyCode.D))
-        {
-            model.QueueMove(Utilities.CardinalDirection.Right);
-        }
-
         if(moving)
         {
             float current = (Time.time - startTime) * Utilities.MOVEMENT_SPEED;
