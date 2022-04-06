@@ -1,4 +1,6 @@
 ﻿using System;
+using UnityEngine;
+
 public interface IAmAnEntity : IOccupy
 {
     public void MoveReady();

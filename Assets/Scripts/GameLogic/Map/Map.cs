@@ -34,14 +34,14 @@ public class Map
                 {
                     if(UnityEngine.Random.Range(1, 100) == 1)
                     {
-                        //var newEnemy = gameController.CreateEntity();
+                        gameController.CreateEntity(map[y, x], new Enemy(this, EnemyType.FlameSentinal));
                     }
                 }
             }
         }
     }
 
-    public Coordinate GetSpawnLocation()
+    public Space GetSpawnLocation()
     {
         Coordinate coordinates = new Coordinate() { x = MAP_SIZE / 2, y = MAP_SIZE / 2 };
         var currentDirection = CardinalDirection.Up;
@@ -68,7 +68,7 @@ public class Map
                 }
             }
         }
-        return coordinates;
+        return GetSpace(coordinates);
     }
 
     public bool Contains(Coordinate coords)

@@ -47,7 +47,6 @@ public abstract class AbstractEntity : IAmAnEntity
         currentSpace.Occupier = null;
         currentSpace = space;
         currentSpace.Occupier = this;
-        var coords = currentSpace.coordinates;
     }
 
     public Space GetCurrentSpace()
@@ -58,8 +57,8 @@ public abstract class AbstractEntity : IAmAnEntity
 
     public abstract bool BlocksLOS();
 
-    public void SetRevealed(bool hide)
+    public void SetRevealed(bool seen)
     {
-        View.GetComponent<SpriteRenderer>().enabled = hide;
+        View.GetComponent<SpriteRenderer>().enabled = seen;
     }
 }

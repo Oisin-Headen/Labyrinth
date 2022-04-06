@@ -1,14 +1,17 @@
 ﻿using System;
+using UnityEngine;
 
 public class Enemy : AbstractEntity, IAmAnEntity
 {
-    public Enemy(Map map) : base(map)
-    {
+    public EnemyType Type { get; private set; }
 
+    public Enemy(Map map, EnemyType type) : base(map)
+    {
+        Type = type;
     }
 
     public override bool BlocksLOS()
     {
-        return true;
+        return Type.blocksLOS;
     }
 }

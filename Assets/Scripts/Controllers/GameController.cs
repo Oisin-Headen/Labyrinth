@@ -1,4 +1,5 @@
 using UnityEngine;
+using static Utilities;
 
 public class GameController : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Sprites.Setup();
         var map = new Map(this);
         player = new Player(map, this);
         playerController.player = player;
@@ -22,18 +24,30 @@ public class GameController : MonoBehaviour
 
     public GameObject CreateTileView(int xPos, int yPos)
     {
-        return Instantiate(Tile, new Vector3(xPos * Utilities.TILE_SIZE, yPos * Utilities.TILE_SIZE), Quaternion.identity, MapHolder.transform);
+        return Instantiate(Tile, new Vector3(xPos * TILE_SIZE, yPos * TILE_SIZE), Quaternion.identity, MapHolder.transform);
     }
 
     public GameObject CreateObstacleView(int xPos, int yPos)
     {
-        return Instantiate(Obstacle, new Vector3(xPos * Utilities.TILE_SIZE, yPos * Utilities.TILE_SIZE), Quaternion.identity, MapHolder.transform);
+        return Instantiate(Obstacle, new Vector3(xPos * TILE_SIZE, yPos * TILE_SIZE), Quaternion.identity, MapHolder.transform);
     }
 
-    public void CreateEntity(Utilities.Coordinate coordinates, IAmAnEntity model)
+    private void CreateEntity(Space space, IAmAnEntity model, Sprite sprite)
     {
-        var newEntity = Instantiate(Entity, new Vector3(coordinates.x * Utilities.TILE_SIZE, coordinates.y * Utilities.TILE_SIZE), Quaternion.identity);
+        var newEntity = Instantiate(Entity, new Vector3(space.coordinates.x * TILE_SIZE, space.coordinates.y * TILE_SIZE), Quaternion.identity);
+        newEntity.GetComponent<SpriteRenderer>().sprite = sprite;
         newEntity.GetComponent<EntityController>().SetModel(model);
         model.View = newEntity.GetComponent<EntityController>();
+    }
+
+    public void CreateEntity(Space space, Character character)
+    {
+        CreateEntity(space, character, Sprites.GetSpriteFor(character.Look));
+        space.Occupier = character;
+    }
+    public void CreateEntity(Space space, Enemy enemy)
+    {
+        CreateEntity(space, enemy, Sprites.GetSpriteFor(enemy.Type));
+        space.Occupier = enemy;
     }
 }

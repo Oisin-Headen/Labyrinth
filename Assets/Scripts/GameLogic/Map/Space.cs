@@ -51,6 +51,7 @@ public class Space
         viewers.Add(viewer);
         SetRevealed(true);
     }
+
     public void RemoveViewer(IViewSpaces viewer)
     {
         viewers.Remove(viewer);

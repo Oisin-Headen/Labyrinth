@@ -15,6 +15,7 @@ public class EntityController : MonoBehaviour
     public void SetModel(IAmAnEntity model)
     {
         this.model = model;
+        //gameObject.GetComponent<SpriteRenderer>().sprite = model.GetSprite();
     }
 
 

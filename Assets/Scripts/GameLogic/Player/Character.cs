@@ -8,15 +8,18 @@ public class Character : AbstractEntity, IOccupy, IAmAnEntity, IViewSpaces
 {
     private ISet<Space> spacesInView = new HashSet<Space>();
 
+    public CharacterLook Look { get; private set; }
+
     // TODO Characters should be expanded, with a Stat class and a 'Class' class.
     // Stat variable;
 
     private int viewRange = 5;
 
 
-    public Character(Space space, Map map) : base (map)
+    public Character(Space space, Map map, CharacterLook look) : base (map)
     {
         currentSpace = space;
+        Look = look;
     }
 
     public override void MoveToSpace(Space space)
@@ -46,5 +49,8 @@ public class Character : AbstractEntity, IOccupy, IAmAnEntity, IViewSpaces
         return false;
     }
 
-    
+    //public override Sprite GetSprite()
+    //{
+    //    return null;
+    //}
 }

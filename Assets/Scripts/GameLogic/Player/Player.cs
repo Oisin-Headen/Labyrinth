@@ -19,12 +19,12 @@ public class Player
 
         // TODO creating test character here
         // create the player in the middle
-        var coordinates = map.GetSpawnLocation();
+        var startSpace = map.GetSpawnLocation();
 
-        var characterModel = new Character(map.GetSpace(coordinates), map);
-        gameController.CreateEntity(coordinates, characterModel);
-        map.GetSpace(coordinates).Occupier = characterModel;
-        characterModel.MoveToSpace(map.GetSpace(coordinates));
+        var characterModel = new Character(startSpace, map, CharacterLook.Warrior);
+        gameController.CreateEntity(startSpace, characterModel);
+        startSpace.Occupier = characterModel;
+        characterModel.MoveToSpace(startSpace);
 
         characters.Add(characterModel);
         selectedCharacter = characterModel;
@@ -37,5 +37,7 @@ public class Player
 
         selectedCharacter.QueueMove(direction);
     }
+
+
 
 }
