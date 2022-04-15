@@ -14,9 +14,12 @@ public static class Utilities
 
     public static Color SPRITE_DARKEN = new Color(0.7f, 0.7f, 0.7f);
     public static Color SPRITE_LIGHT = new Color(1, 1, 1);
-    public static Color SPRITE_MOVE = new Color(0.3f, 0.3f, 1);
-    public static Color SPRITE_MOVE_SELECTED = new Color(0.7f, 0.7f, 1);
 
+    public static Color SPRITE_MOVE = new Color(0.3f, 0.3f, 1);
+    public static Color SPRITE_ATTACK = new Color(1, 0.3f, 0.3f);
+
+    public static Color SPRITE_MOVE_SELECTED = new Color(0.7f, 0.7f, 1);
+    public static Color SPRITE_ATTACK_SELECTED = new Color(1, 0.7f, 0.7f);
 
 
 
@@ -56,7 +59,7 @@ public static class Utilities
             return new Coordinate(a.x + b.x, a.y + b.y);
         }
     }
-    
+
 
     public static Coordinate GetCoordinateInDirection(this Coordinate coordinate, CardinalDirection direction)
     {

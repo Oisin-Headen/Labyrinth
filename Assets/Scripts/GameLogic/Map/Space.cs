@@ -3,29 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Utilities;
 
-public class Space
+public class Space : MonoBehaviour
 {
-    private readonly GameObject view;
-    public readonly Coordinate coordinates;
+    private SpriteRenderer selector;
+
+    private SelectionType currentSelectionType;
+
+    private Player player;
+
+    public Coordinate Coordinates { get; private set; }
 
     public IOccupy Occupier { get; set; }
 
-    private ISet<IViewSpaces> viewers = new HashSet<IViewSpaces>();
+    private readonly ISet<IViewSpaces> viewers = new HashSet<IViewSpaces>();
 
-    public Space(GameObject view, Coordinate coordinates)
+    public void Setup(Coordinate coordinates, Player player)
     {
-        this.view = view;
-        this.coordinates = coordinates;
+        this.player = player;
+        Coordinates = coordinates;
+        selector = gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
 
     public GameObject GetView()
     {
-        return view;
+        return gameObject;
     }
 
     public bool IsEmpty()
     {
         return Occupier == null;
+    }
+
+    public bool BlocksLOS()
+    {
+        return !(IsEmpty() || !Occupier.BlocksLOS()); ;
     }
 
     private void SetRevealed(bool seen)
@@ -36,12 +47,12 @@ public class Space
         }
         if (seen)
         {
-            view.GetComponent<SpriteRenderer>().enabled = true;
-            view.GetComponent<SpriteRenderer>().color = SPRITE_LIGHT;
+            gameObject.GetComponent<SpriteRenderer>().enabled = true;
+            gameObject.GetComponent<SpriteRenderer>().color = SPRITE_LIGHT;
         }
         else
         {
-            view.GetComponent<SpriteRenderer>().color = SPRITE_DARKEN;
+            gameObject.GetComponent<SpriteRenderer>().color = SPRITE_DARKEN;
         }
 
     }
@@ -61,8 +72,54 @@ public class Space
         }
     }
 
-    public bool BlocksLOS()
+    public void SetSelected(SelectionType move)
     {
-        return !(IsEmpty() || !Occupier.BlocksLOS()); ;
+        currentSelectionType = move;
+        switch (move)
+        {
+            case SelectionType.none:
+                selector.enabled = false;
+                break;
+            case SelectionType.move:
+                selector.color = SPRITE_MOVE;
+                selector.enabled = true;
+                break;
+            case SelectionType.attack:
+                selector.color = SPRITE_ATTACK;
+                selector.enabled = true;
+                break;
+        }
+    }
+
+    public void OnMouseOver()
+    {
+        if(currentSelectionType == SelectionType.move)
+        {
+            selector.color = SPRITE_MOVE_SELECTED;
+        }
+        else if (currentSelectionType == SelectionType.attack)
+        {
+            selector.color = SPRITE_ATTACK_SELECTED;
+        }
+    }
+
+    public void OnMouseExit()
+    {
+        if (currentSelectionType == SelectionType.move)
+        {
+            selector.color = SPRITE_MOVE;
+        }
+        else if (currentSelectionType == SelectionType.attack)
+        {
+            selector.color = SPRITE_ATTACK;
+        }
+    }
+
+    public void OnMouseDown()
+    {
+        if (currentSelectionType != SelectionType.none)
+        {
+            player.SpaceClicked(this);
+        }
     }
 }

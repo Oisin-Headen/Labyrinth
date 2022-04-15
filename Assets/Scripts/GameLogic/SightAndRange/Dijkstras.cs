@@ -25,11 +25,11 @@ public static class Dijkstras
             var adjacentSpaces = new List<Space>();
             foreach (CardinalDirection direction in Enum.GetValues(typeof(CardinalDirection)))
             {
-                var newSpace = map.GetSpace(currentSpace.coordinates.GetCoordinateInDirection(direction));
+                var newSpace = map.GetSpace(currentSpace.Coordinates.GetCoordinateInDirection(direction));
                 if(newSpace != null && (newSpace.Occupier == null || ignoreImpassible))
                 {
                     adjacentSpaces.Add(newSpace);
-                    var diagonalSpace = map.GetSpace(newSpace.coordinates.GetCoordinateInDirection(direction.SpiralDirectionClockwise()));
+                    var diagonalSpace = map.GetSpace(newSpace.Coordinates.GetCoordinateInDirection(direction.SpiralDirectionClockwise()));
                     if(diagonalSpace != null && (diagonalSpace.Occupier == null || ignoreImpassible))
                     {
                         adjacentSpaces.Add(diagonalSpace);
@@ -42,8 +42,8 @@ public static class Dijkstras
             {
                 // get cost for this adjacent space
                 int newNodeCost = nodes[currentSpace].Cost + ONE_SPACE;
-                if (Mathf.Abs(currentSpace.coordinates.x - space.coordinates.x) == 1 &&
-                    Mathf.Abs(currentSpace.coordinates.y - space.coordinates.y) == 1)
+                if (Mathf.Abs(currentSpace.Coordinates.x - space.Coordinates.x) == 1 &&
+                    Mathf.Abs(currentSpace.Coordinates.y - space.Coordinates.y) == 1)
                 {
                     // if it's a diagonal, increse the movement cost
                     newNodeCost += DIAGONAL_SPACE_INCREASE;

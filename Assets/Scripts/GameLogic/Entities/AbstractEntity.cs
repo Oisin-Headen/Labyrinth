@@ -5,7 +5,7 @@ using static Utilities;
 
 public abstract class AbstractEntity : IAmAnEntity
 {
-    private readonly Queue<CardinalDirection> movePath = new Queue<CardinalDirection>();
+    private readonly Queue<Space> movePath = new Queue<Space>();
 
     public EntityController View { get; set; }
 
@@ -18,9 +18,9 @@ public abstract class AbstractEntity : IAmAnEntity
     }
 
 
-    public void QueueMove(CardinalDirection direction)
+    public void QueueMove(Space space)
     {
-        movePath.Enqueue(direction);
+        movePath.Enqueue(space);
     }
 
     public void MoveReady()
@@ -30,8 +30,7 @@ public abstract class AbstractEntity : IAmAnEntity
             return;
         }
 
-        var newCoords = currentSpace.coordinates.GetCoordinateInDirection(movePath.Dequeue());
-        Space newSpace = map.GetSpace(newCoords);
+        var newSpace = movePath.Dequeue();
 
         if (newSpace == null || !newSpace.IsEmpty())
         {

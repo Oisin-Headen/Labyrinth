@@ -12,19 +12,24 @@ public class GameController : MonoBehaviour
 
     public PlayerController playerController;
     private Player player;
+    public Map Map { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
         Sprites.Setup();
-        var map = new Map(this);
-        player = new Player(map, this);
+        player = new Player(this);
+        Map = new Map(this);
+        player.AdditionalSetup(Map);
         playerController.player = player;
     }
 
-    public GameObject CreateTileView(int xPos, int yPos)
+    public Space CreateSpace(int xPos, int yPos)
     {
-        return Instantiate(Tile, new Vector3(xPos * TILE_SIZE, yPos * TILE_SIZE), Quaternion.identity, MapHolder.transform);
+        var space = Instantiate(Tile, new Vector3(xPos * TILE_SIZE, yPos * TILE_SIZE), Quaternion.identity, MapHolder.transform).GetComponent<Space>();
+
+        space.Setup(new Coordinate(xPos, yPos), player);
+        return space;
     }
 
     public GameObject CreateObstacleView(int xPos, int yPos)
@@ -34,7 +39,7 @@ public class GameController : MonoBehaviour
 
     private void CreateEntity(Space space, IAmAnEntity model, Sprite sprite)
     {
-        var newEntity = Instantiate(Entity, new Vector3(space.coordinates.x * TILE_SIZE, space.coordinates.y * TILE_SIZE), Quaternion.identity);
+        var newEntity = Instantiate(Entity, new Vector3(space.Coordinates.x * TILE_SIZE, space.Coordinates.y * TILE_SIZE), Quaternion.identity);
         newEntity.GetComponent<SpriteRenderer>().sprite = sprite;
         newEntity.GetComponent<EntityController>().SetModel(model);
         model.View = newEntity.GetComponent<EntityController>();

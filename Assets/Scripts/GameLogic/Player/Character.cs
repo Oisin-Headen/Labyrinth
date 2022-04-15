@@ -15,6 +15,8 @@ public class Character : AbstractEntity, IOccupy, IAmAnEntity, IViewSpaces
 
     private int viewRange = 5;
 
+    public readonly int MoveRange = 3;
+    public readonly int AttackRange = 1;
 
     public Character(Space space, Map map, CharacterLook look) : base (map)
     {
@@ -25,7 +27,7 @@ public class Character : AbstractEntity, IOccupy, IAmAnEntity, IViewSpaces
     public override void MoveToSpace(Space space)
     {
         base.MoveToSpace(space);
-        var coords = currentSpace.coordinates;
+        var coords = currentSpace.Coordinates;
 
 
         foreach(var oldSpaceInView in spacesInView)

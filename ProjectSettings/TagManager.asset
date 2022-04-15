@@ -44,3 +44,9 @@ TagManager:
   - name: Object
     uniqueID: 1199469685
     locked: 0
+  - name: Entity
+    uniqueID: 2735711583
+    locked: 0
+  - name: Selector
+    uniqueID: 3135140519
+    locked: 0

@@ -22,8 +22,7 @@ public class Map
         {
             for (int x = 0; x < MAP_SIZE; x++)
             {
-                var newTile = gameController.CreateTileView(x, y);
-                map[y, x] = new Space(newTile, new Coordinate(x, y));
+                map[y, x] = gameController.CreateSpace(x, y);
 
                 if(setupMap[y,x] == Terrain.wall)
                 {
