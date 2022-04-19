@@ -3,30 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Utilities;
 
-public class Space : MonoBehaviour
+public class Space
 {
-    private SpriteRenderer selector;
 
-    private SelectionType currentSelectionType;
-
-    private Player player;
-
+    public SelectionType CurrentSelectionType { get; private set; }
     public Coordinate Coordinates { get; private set; }
+    public SpaceController Controller { get; private set; }
 
     public IOccupy Occupier { get; set; }
 
+    private readonly GameController gameController;
+
     private readonly ISet<IViewSpaces> viewers = new HashSet<IViewSpaces>();
 
-    public void Setup(Coordinate coordinates, Player player)
+
+    public Space(Coordinate coordinates, GameController gameController)
     {
-        this.player = player;
+        this.gameController = gameController;
         Coordinates = coordinates;
-        selector = gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
 
-    public GameObject GetView()
+    public void SetController(SpaceController controller)
     {
-        return gameObject;
+        Controller = controller;
     }
 
     public bool IsEmpty()
@@ -45,16 +44,7 @@ public class Space : MonoBehaviour
         {
             Occupier.SetRevealed(seen);
         }
-        if (seen)
-        {
-            gameObject.GetComponent<SpriteRenderer>().enabled = true;
-            gameObject.GetComponent<SpriteRenderer>().color = SPRITE_LIGHT;
-        }
-        else
-        {
-            gameObject.GetComponent<SpriteRenderer>().color = SPRITE_DARKEN;
-        }
-
+        Controller.SetRevealed(seen);
     }
 
     public void AddViewer(IViewSpaces viewer)
@@ -74,52 +64,16 @@ public class Space : MonoBehaviour
 
     public void SetSelected(SelectionType move)
     {
-        currentSelectionType = move;
-        switch (move)
-        {
-            case SelectionType.none:
-                selector.enabled = false;
-                break;
-            case SelectionType.move:
-                selector.color = SPRITE_MOVE;
-                selector.enabled = true;
-                break;
-            case SelectionType.attack:
-                selector.color = SPRITE_ATTACK;
-                selector.enabled = true;
-                break;
-        }
+        CurrentSelectionType = move;
+        Controller.SetSelected();
     }
 
-    public void OnMouseOver()
+    public void Clicked()
     {
-        if(currentSelectionType == SelectionType.move)
+        if (CurrentSelectionType != SelectionType.none)
         {
-            selector.color = SPRITE_MOVE_SELECTED;
-        }
-        else if (currentSelectionType == SelectionType.attack)
-        {
-            selector.color = SPRITE_ATTACK_SELECTED;
+            gameController.Player.SpaceClicked(this);
         }
     }
-
-    public void OnMouseExit()
-    {
-        if (currentSelectionType == SelectionType.move)
-        {
-            selector.color = SPRITE_MOVE;
-        }
-        else if (currentSelectionType == SelectionType.attack)
-        {
-            selector.color = SPRITE_ATTACK;
-        }
-    }
-
-    public void OnMouseDown()
-    {
-        if (currentSelectionType != SelectionType.none)
-        {
-            player.SpaceClicked(this);
-        }
-    }
+    
 }

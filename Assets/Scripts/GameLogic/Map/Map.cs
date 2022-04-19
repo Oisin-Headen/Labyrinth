@@ -22,7 +22,10 @@ public class Map
         {
             for (int x = 0; x < MAP_SIZE; x++)
             {
-                map[y, x] = gameController.CreateSpace(x, y);
+                var coords = new Coordinate(x, y);
+                var space = new Space(coords, gameController);
+                map[y, x] = space;
+                gameController.CreateSpaceForModel(coords, space);
 
                 if(setupMap[y,x] == Terrain.wall)
                 {

@@ -15,13 +15,10 @@ public class Player
 
 
     // TODO this should take in the initial characters once there's a character creation menu
-    public Player(GameController gameController)
+    public Player(GameController gameController, Map map)
     {
-        this.gameController = gameController;  
-    }
+        this.gameController = gameController;
 
-    public void AdditionalSetup(Map map)
-    {
         this.map = map;
         // create the player in the middle
         var startSpace = map.GetSpawnLocation();

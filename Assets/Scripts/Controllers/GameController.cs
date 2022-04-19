@@ -10,26 +10,27 @@ public class GameController : MonoBehaviour
     public GameObject MapHolder;
     public GameSprites Sprites;
 
+    // this is plugged in via Unity
     public PlayerController playerController;
-    private Player player;
+
+    public Player Player { get; private set; }
     public Map Map { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
         Sprites.Setup();
-        player = new Player(this);
         Map = new Map(this);
-        player.AdditionalSetup(Map);
-        playerController.player = player;
+        Player = new Player(this, Map);
+        playerController.player = Player;
     }
 
-    public Space CreateSpace(int xPos, int yPos)
+    public void CreateSpaceForModel(Coordinate coords, Space spaceModel)
     {
-        var space = Instantiate(Tile, new Vector3(xPos * TILE_SIZE, yPos * TILE_SIZE), Quaternion.identity, MapHolder.transform).GetComponent<Space>();
+        var spaceController = Instantiate(Tile, new Vector3(coords.x * TILE_SIZE, coords.y * TILE_SIZE), Quaternion.identity, MapHolder.transform).GetComponent<SpaceController>();
 
-        space.Setup(new Coordinate(xPos, yPos), player);
-        return space;
+        spaceController.SetModel(spaceModel);
+        spaceModel.SetController(spaceController);
     }
 
     public GameObject CreateObstacleView(int xPos, int yPos)

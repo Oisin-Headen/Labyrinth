@@ -38,7 +38,7 @@ public abstract class AbstractEntity : IAmAnEntity
         }
 
         MoveToSpace(newSpace);
-        View.MoveTo(newSpace.GetView());
+        View.MoveTo(newSpace.Controller.gameObject);
     }
 
     public virtual void MoveToSpace(Space space)

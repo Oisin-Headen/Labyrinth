@@ -105,8 +105,8 @@ public static class MapGenerator
             }
         }
 
-         //TODO empty map for testing
-        //setupMap = CreateEmptyMap();
+        //TODO empty map for testing
+        setupMap = CreateEmptyMap();
 
 
 

@@ -15,7 +15,7 @@ public class Character : AbstractEntity, IOccupy, IAmAnEntity, IViewSpaces
 
     private int viewRange = 5;
 
-    public readonly int MoveRange = 3;
+    public readonly int MoveRange = 8;
     public readonly int AttackRange = 1;
 
     public Character(Space space, Map map, CharacterLook look) : base (map)
