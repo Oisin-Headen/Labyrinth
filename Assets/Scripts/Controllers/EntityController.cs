@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EntityController : MonoBehaviour
 {
-    private IAmAnEntity model;
+    private IEntity model;
 
     private bool moving = false;
 
@@ -12,7 +12,7 @@ public class EntityController : MonoBehaviour
     private float startTime;
     private float distance;
 
-    public void SetModel(IAmAnEntity model)
+    public void SetModel(IEntity model)
     {
         this.model = model;
         //gameObject.GetComponent<SpriteRenderer>().sprite = model.GetSprite();

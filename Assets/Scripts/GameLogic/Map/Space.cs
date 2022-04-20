@@ -5,37 +5,22 @@ using static Utilities;
 
 public class Space
 {
-
     public SelectionType CurrentSelectionType { get; private set; }
     public Coordinate Coordinates { get; private set; }
-    public SpaceController Controller { get; private set; }
+    public SpaceController Controller { get; set; }
 
     public IOccupy Occupier { get; set; }
 
+    public bool IsEmpty { get { return Occupier == null; } }
+    public bool BlocksLOS { get { return !(IsEmpty || !Occupier.BlocksLOS); } }
+
     private readonly GameController gameController;
-
     private readonly ISet<IViewSpaces> viewers = new HashSet<IViewSpaces>();
-
 
     public Space(Coordinate coordinates, GameController gameController)
     {
         this.gameController = gameController;
         Coordinates = coordinates;
-    }
-
-    public void SetController(SpaceController controller)
-    {
-        Controller = controller;
-    }
-
-    public bool IsEmpty()
-    {
-        return Occupier == null;
-    }
-
-    public bool BlocksLOS()
-    {
-        return !(IsEmpty() || !Occupier.BlocksLOS()); ;
     }
 
     private void SetRevealed(bool seen)
@@ -70,9 +55,13 @@ public class Space
 
     public void Clicked()
     {
-        if (CurrentSelectionType != SelectionType.none)
+        if (CurrentSelectionType == SelectionType.move)
         {
-            gameController.Player.SpaceClicked(this);
+            gameController.Player.SpaceClickedMove(this);
+        }
+        if (CurrentSelectionType == SelectionType.attack)
+        {
+            gameController.Player.SpaceClickedAttack(this);
         }
     }
     

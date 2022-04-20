@@ -4,24 +4,35 @@ using System;
 using System.Collections.Generic;
 using static Utilities;
 
-public class Character : AbstractEntity, IOccupy, IAmAnEntity, IViewSpaces
+public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
 {
     private ISet<Space> spacesInView = new HashSet<Space>();
 
+    public readonly StatBlock stats;
+
     public CharacterLook Look { get; private set; }
 
-    // TODO Characters should be expanded, with a Stat class and a 'Class' class.
-    // Stat variable;
+    public override bool BlocksLOS { get { return false; } }
+    public override int Armour { get { return 0; } }
+    public DamageType WeaponDamageType { get { return DamageType.Blunt; } }
 
+    // TODO Increase by weapon damage or something.
+    public int AttackValue { get { return stats.Strength + 2; } }
+    public int MoveRange { get { return stats.Dexerity; } }
+
+
+    // TODO Characters should be expanded, with a 'Class' class.
+
+    // TODO temp variables, should be put elsewhere. 'Race' and 'Weapon' classes
     private int viewRange = 5;
-
-    public readonly int MoveRange = 3;
     public readonly int AttackRange = 1;
 
     public Character(Space space, Map map, CharacterLook look) : base (map)
     {
         currentSpace = space;
         Look = look;
+
+        stats = new StatBlock(3,3,3,3,3);
     }
 
     public override void MoveToSpace(Space space)
@@ -44,15 +55,13 @@ public class Character : AbstractEntity, IOccupy, IAmAnEntity, IViewSpaces
         }
     }
 
-    
-
-    public override bool BlocksLOS()
+    public override DamageEffectiveness GetDamageEffectiveness(DamageType damageType)
     {
-        return false;
+        return DamageEffectiveness.Normal;
     }
 
-    //public override Sprite GetSprite()
-    //{
-    //    return null;
-    //}
+    public override bool TakeDamage(int value)
+    {
+        throw new NotImplementedException();
+    }
 }

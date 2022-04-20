@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Player player;
+    public GameController gameController;
 
     public void Update()
     {

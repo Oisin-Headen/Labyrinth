@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Utilities;
 
-public abstract class AbstractEntity : IAmAnEntity
+public abstract class AbstractEntity : IEntity
 {
     private readonly Queue<Space> movePath = new Queue<Space>();
 
-    public EntityController View { get; set; }
+    public EntityController Controller { get; set; }
+
+    public abstract bool BlocksLOS { get; }
+    public abstract int Armour { get; }
 
     protected Space currentSpace;
     protected readonly Map map;
@@ -16,6 +19,10 @@ public abstract class AbstractEntity : IAmAnEntity
     {
         this.map = map;
     }
+
+
+    public abstract DamageEffectiveness GetDamageEffectiveness(DamageType damageType);
+    public abstract bool TakeDamage(int value);
 
 
     public void QueueMove(Space space)
@@ -32,13 +39,13 @@ public abstract class AbstractEntity : IAmAnEntity
 
         var newSpace = movePath.Dequeue();
 
-        if (newSpace == null || !newSpace.IsEmpty())
+        if (newSpace == null || !newSpace.IsEmpty)
         {
             return;
         }
 
         MoveToSpace(newSpace);
-        View.MoveTo(newSpace.Controller.gameObject);
+        Controller.MoveTo(newSpace.Controller.gameObject);
     }
 
     public virtual void MoveToSpace(Space space)
@@ -53,11 +60,8 @@ public abstract class AbstractEntity : IAmAnEntity
         return currentSpace;
     }
 
-
-    public abstract bool BlocksLOS();
-
     public void SetRevealed(bool seen)
     {
-        View.GetComponent<SpriteRenderer>().enabled = seen;
+        Controller.GetComponent<SpriteRenderer>().enabled = seen;
     }
 }

@@ -25,7 +25,7 @@ public class Sight
                 for (i = 0; i < (int)l; i++)
                 {
                     var tempSpace = map.GetSpace(new Coordinate((int)Mathf.Round(ox), (int)Mathf.Round(oy)));
-                    if (tempSpace != null && tempSpace.BlocksLOS())
+                    if (tempSpace != null && tempSpace.BlocksLOS)
                     {
                         return false;
                     }

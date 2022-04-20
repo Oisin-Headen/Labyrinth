@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour
     public GameObject MapHolder;
     public GameSprites Sprites;
 
-    // this is plugged in via Unity
+    // this is plugged in via Unity. Don't delete it again.
     public PlayerController playerController;
 
     public Player Player { get; private set; }
@@ -30,7 +30,7 @@ public class GameController : MonoBehaviour
         var spaceController = Instantiate(Tile, new Vector3(coords.x * TILE_SIZE, coords.y * TILE_SIZE), Quaternion.identity, MapHolder.transform).GetComponent<SpaceController>();
 
         spaceController.SetModel(spaceModel);
-        spaceModel.SetController(spaceController);
+        spaceModel.Controller = spaceController;
     }
 
     public GameObject CreateObstacleView(int xPos, int yPos)
@@ -38,12 +38,12 @@ public class GameController : MonoBehaviour
         return Instantiate(Obstacle, new Vector3(xPos * TILE_SIZE, yPos * TILE_SIZE), Quaternion.identity, MapHolder.transform);
     }
 
-    private void CreateEntity(Space space, IAmAnEntity model, Sprite sprite)
+    private void CreateEntity(Space space, IEntity model, Sprite sprite)
     {
         var newEntity = Instantiate(Entity, new Vector3(space.Coordinates.x * TILE_SIZE, space.Coordinates.y * TILE_SIZE), Quaternion.identity);
         newEntity.GetComponent<SpriteRenderer>().sprite = sprite;
         newEntity.GetComponent<EntityController>().SetModel(model);
-        model.View = newEntity.GetComponent<EntityController>();
+        model.Controller = newEntity.GetComponent<EntityController>();
     }
 
     public void CreateEntity(Space space, Character character)

@@ -30,7 +30,7 @@ public class Map
                 if(setupMap[y,x] == Terrain.wall)
                 {
                     var newObject = gameController.CreateObstacleView(x, y);
-                    map[y, x].Occupier = new Obstacle(newObject, map[y, x]);
+                    map[y, x].Occupier = new Obstacle(newObject, map[y, x], ObstacleType.Wall);
                 }
                 else if(setupMap[y,x] == Terrain.empty)
                 {
@@ -54,7 +54,7 @@ public class Map
         // Spiral outwards to find a empty spot close to the centre of the map.
         while (!done)
         {
-            if (GetSpace(coordinates).IsEmpty())
+            if (GetSpace(coordinates).IsEmpty)
             {
                 done = true;
             }

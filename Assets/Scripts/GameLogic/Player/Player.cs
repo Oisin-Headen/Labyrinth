@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 using static Utilities;
 
 public class Player
@@ -11,8 +12,7 @@ public class Player
     private IDictionary<Space, (IList<Space>, int)> selectedSpaces = new Dictionary<Space, (IList<Space>, int)>();
 
     private readonly GameController gameController;
-    private Map map;
-
+    private readonly Map map;
 
     // TODO this should take in the initial characters once there's a character creation menu
     public Player(GameController gameController, Map map)
@@ -44,6 +44,9 @@ public class Player
 
     public void StartSpaceSelection(SelectionType type)
     {
+        if (selectedCharacter == null)
+            return;
+
         if (currentOrders == type)
         {
             ClearSpaceSelection();
@@ -63,7 +66,7 @@ public class Player
             range = selectedCharacter.AttackRange;
         }
 
-        selectedSpaces = Dijkstras.GetSpacesInRange(map, selectedCharacter.GetCurrentSpace().Coordinates, range, false);
+        selectedSpaces = Dijkstras.GetSpacesInRange(map, selectedCharacter.GetCurrentSpace().Coordinates, range, type==SelectionType.attack);
         selectedSpaces.Remove(selectedCharacter.GetCurrentSpace());
         foreach (var space in selectedSpaces.Keys)
         {
@@ -73,7 +76,7 @@ public class Player
 
     public void ClearSpaceSelection()
     {
-        if(currentOrders == SelectionType.none)
+        if (currentOrders == SelectionType.none)
         {
             return;
         }
@@ -85,14 +88,39 @@ public class Player
         selectedSpaces = null;
     }
 
-    public void SpaceClicked(Space space)
+    public void SpaceClickedMove(Space space)
     {
         var path = selectedSpaces[space].Item1;
         Console.WriteLine(path.Count);
-        foreach(var step in path)
+        foreach (var step in path)
         {
             Move(step);
         }
+        ClearSpaceSelection();
+    }
+
+    public void SpaceClickedAttack(Space space)
+    {
+        if (space.IsEmpty)
+        {
+            ClearSpaceSelection();
+            return;
+        }
+
+        int damage = CombatCalculator.CalculateDamage(
+            selectedCharacter.AttackValue,
+            space.Occupier.Armour,
+            space.Occupier.GetDamageEffectiveness(selectedCharacter.WeaponDamageType));
+        bool targetDestroyed = space.Occupier.TakeDamage(damage);
+        if (targetDestroyed)
+        {
+            space.Occupier = null;
+            foreach(var character in characters)
+            {
+                character.MoveToSpace(character.GetCurrentSpace());
+            }
+        }
+
         ClearSpaceSelection();
     }
 }

@@ -1,6 +1,11 @@
 ﻿using System;
 public interface IOccupy
 {
-    bool BlocksLOS();
+    public int Armour { get; }
+    public bool BlocksLOS { get; }
     void SetRevealed(bool hide);
+    DamageEffectiveness GetDamageEffectiveness(DamageType damageType);
+
+    // returns true if the target was destroyed
+    bool TakeDamage(int value);
 }

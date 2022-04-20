@@ -4,14 +4,22 @@ using static Utilities;
 public class Obstacle : IOccupy
 {
     private readonly GameObject view;
+    private readonly ObstacleType type;
+
+    public int Armour { get { return type.armour; } }
+    public int Health { get; private set; }
 
     private Space space;
 
-    public Obstacle(GameObject view, Space space)
+    public Obstacle(GameObject view, Space space, ObstacleType type)
     {
         this.view = view;
         this.space = space;
+        this.type = type;
+        Health = type.maxHealth;
     }
+
+    public bool BlocksLOS { get { return type.blocksLOS; } }
 
     public GameObject GetView()
     {
@@ -29,11 +37,6 @@ public class Obstacle : IOccupy
         return space;
     }
 
-    public bool BlocksLOS()
-    {
-        return true;
-    }
-
     public void SetRevealed(bool seen)
     {
         if (seen)
@@ -45,5 +48,21 @@ public class Obstacle : IOccupy
         {
             view.GetComponent<SpriteRenderer>().color = SPRITE_DARKEN;
         }
+    }
+
+    public DamageEffectiveness GetDamageEffectiveness(DamageType damageType)
+    {
+        return type.suite.suite[damageType];
+    }
+
+    public bool TakeDamage(int value)
+    {
+        Health -= value;
+        if (Health <= 0)
+        {
+            Object.Destroy(view);
+            return true;
+        }
+        return false;
     }
 }

@@ -64,7 +64,7 @@ public static class FieldOfView
                             }
 
                             // Add any opaque tiles to the shadow map.
-                            if (visible && tiles.GetSpace(pos).BlocksLOS())
+                            if (visible && tiles.GetSpace(pos).BlocksLOS)
                             {
                                 line.Add(projection);
                                 fullShadow = line.IsFullShadow();

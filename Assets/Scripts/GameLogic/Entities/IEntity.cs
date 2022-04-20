@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-public interface IAmAnEntity : IOccupy
+public interface IEntity : IOccupy
 {
     public void MoveReady();
     public void QueueMove(Space space);
 
-    public EntityController View { get; set; }
+    public EntityController Controller { get; set; }
 }
