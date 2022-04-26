@@ -24,4 +24,5 @@ public class ObstacleType
         mental: DamageEffectiveness.Immune);
 
     public static ObstacleType Wall = new ObstacleType(true, wallResistences, 30, 5);
+    public static ObstacleType Gold = new ObstacleType(true, wallResistences, 20, 2);
 }
