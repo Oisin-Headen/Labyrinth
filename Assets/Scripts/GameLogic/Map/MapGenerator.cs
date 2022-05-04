@@ -96,19 +96,29 @@ public static class MapGenerator
                 setupMap[topleftY + 1, topleftX] = blockedLeft ? Terrain.wall : Terrain.empty;
                 setupMap[topleftY + 2, topleftX] = blockedLeft ? Terrain.wall : Terrain.empty;
 
-
-
                 setupMap[topleftY + 1, topleftX + 1] = Terrain.empty;
                 setupMap[topleftY + 1, topleftX + 2] = Terrain.empty;
                 setupMap[topleftY + 2, topleftX + 1] = Terrain.empty;
-                setupMap[topleftY + 2, topleftX + 2] = Terrain.empty;
+                setupMap[topleftY + 2, topleftX + 2] = Terrain.empty;   
+            }
+        }
+
+        for (int y = 0; y < MAP_SIZE; ++y)
+        {
+            for (int x = 0; x < MAP_SIZE; x++)
+            {
+                if (setupMap[y,x] == Terrain.wall)
+                {
+                    if(UnityEngine.Random.Range(0,10) == 0)
+                    {
+                        setupMap[y, x] = Terrain.gold;
+                    }
+                }
             }
         }
 
         //TODO empty map for testing
         //setupMap = CreateEmptyMap();
-
-
 
         return setupMap;
     }

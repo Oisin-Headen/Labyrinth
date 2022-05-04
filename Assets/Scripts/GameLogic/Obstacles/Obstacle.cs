@@ -17,6 +17,7 @@ public class Obstacle : IOccupy
         this.space = space;
         this.type = type;
         Health = type.maxHealth;
+        view.GetComponent<SpriteRenderer>().sprite = GameSprites.GetSpriteFor(type);
     }
 
     public bool BlocksLOS { get { return type.blocksLOS; } }

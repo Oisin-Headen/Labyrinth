@@ -9,7 +9,7 @@ public class Map
 
     public enum Terrain
     {
-        NOT_SETUP, empty, wall, hardWall, edge
+        NOT_SETUP, empty, wall, gold, hardWall, edge
     }
 
     public Map(GameController gameController)
@@ -31,6 +31,11 @@ public class Map
                 {
                     var newObject = gameController.CreateObstacleView(x, y);
                     map[y, x].Occupier = new Obstacle(newObject, map[y, x], ObstacleType.Wall);
+                }
+                if (setupMap[y, x] == Terrain.gold)
+                {
+                    var newObject = gameController.CreateObstacleView(x, y);
+                    map[y, x].Occupier = new Obstacle(newObject, map[y, x], ObstacleType.Gold);
                 }
                 else if(setupMap[y,x] == Terrain.empty)
                 {

@@ -19,6 +19,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // this needs to be first, since it sets up the static methods.
         Sprites.Setup();
         Map = new Map(this);
         Player = new Player(this, Map);
@@ -48,12 +49,12 @@ public class GameController : MonoBehaviour
 
     public void CreateEntity(Space space, Character character)
     {
-        CreateEntity(space, character, Sprites.GetSpriteFor(character.Look));
+        CreateEntity(space, character, GameSprites.GetSpriteFor(character.Look));
         space.Occupier = character;
     }
     public void CreateEntity(Space space, Enemy enemy)
     {
-        CreateEntity(space, enemy, Sprites.GetSpriteFor(enemy.Type));
+        CreateEntity(space, enemy, GameSprites.GetSpriteFor(enemy.Type));
         space.Occupier = enemy;
     }
 }

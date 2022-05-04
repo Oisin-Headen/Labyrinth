@@ -17,9 +17,9 @@ public class GameSprites : MonoBehaviour
     // enemies 
     public Sprite FlameSentinal;
 
-    private readonly Dictionary<ObstacleType, Sprite> Obstacles = new Dictionary<ObstacleType, Sprite>();
-    private readonly Dictionary<CharacterLook, Sprite> CharacterLooks = new Dictionary<CharacterLook, Sprite>();
-    private readonly Dictionary<EnemyType, Sprite> Enemies = new Dictionary<EnemyType, Sprite>();
+    private static readonly Dictionary<ObstacleType, Sprite> Obstacles = new Dictionary<ObstacleType, Sprite>();
+    private static readonly Dictionary<CharacterLook, Sprite> CharacterLooks = new Dictionary<CharacterLook, Sprite>();
+    private static readonly Dictionary<EnemyType, Sprite> Enemies = new Dictionary<EnemyType, Sprite>();
 
 
 
@@ -33,17 +33,17 @@ public class GameSprites : MonoBehaviour
         Enemies.Add(EnemyType.FlameSentinal, FlameSentinal);
     }
 
-    public Sprite GetSpriteFor(CharacterLook look)
+    public static Sprite GetSpriteFor(CharacterLook look)
     {
         return CharacterLooks[look];
     }
 
-    public Sprite GetSpriteFor(EnemyType type)
+    public static Sprite GetSpriteFor(EnemyType type)
     {
         return Enemies[type];
     }
 
-    public Sprite GetSpriteFor(ObstacleType obstacle)
+    public static Sprite GetSpriteFor(ObstacleType obstacle)
     {
         return Obstacles[obstacle];
     }
