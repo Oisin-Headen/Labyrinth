@@ -27,12 +27,16 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
     private int viewRange = 5;
     public readonly int AttackRange = 1;
 
-    public Character(Space space, Map map, CharacterLook look) : base (map)
+    public Character(Space space, Map map, CharacterLook look) : base(map)
     {
         currentSpace = space;
         Look = look;
 
-        stats = new StatBlock(3,3,3,3,3);
+        //TODO do actual stats
+        if (look == CharacterLook.Warrior)
+            stats = new StatBlock(3, 3, 3, 3, 3);
+        else
+            stats = new StatBlock(2, 2, 2, 4, 4);
     }
 
     public override void MoveToSpace(Space space)
@@ -41,7 +45,7 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
         var coords = currentSpace.Coordinates;
 
 
-        foreach(var oldSpaceInView in spacesInView)
+        foreach (var oldSpaceInView in spacesInView)
         {
             oldSpaceInView.RemoveViewer(this);
         }

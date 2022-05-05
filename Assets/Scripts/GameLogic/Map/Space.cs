@@ -55,14 +55,7 @@ public class Space
 
     public void Clicked()
     {
-        if (CurrentSelectionType == SelectionType.move)
-        {
-            gameController.Player.SpaceClickedMove(this);
-        }
-        if (CurrentSelectionType == SelectionType.attack)
-        {
-            gameController.Player.SpaceClickedAttack(this);
-        }
+        gameController.Player.SpaceClickedOn(this);
     }
     
 }

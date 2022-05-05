@@ -21,16 +21,19 @@ public class Player
 
         this.map = map;
         // create the player in the middle
-        var startSpace = map.GetSpawnLocation();
 
-        // TODO creating test character here
-        var characterModel = new Character(startSpace, map, CharacterLook.Warrior);
-        gameController.CreateEntity(startSpace, characterModel);
-        startSpace.Occupier = characterModel;
-        characterModel.MoveToSpace(startSpace);
+        foreach (var look in new CharacterLook[]{CharacterLook.Warrior, CharacterLook.Mage})
+        {
+            var startSpace = map.GetSpawnLocation();
 
-        characters.Add(characterModel);
-        selectedCharacter = characterModel;
+            // TODO creating test character here
+            var characterModel = new Character(startSpace, map, look);
+            gameController.CreateEntity(startSpace, characterModel);
+            startSpace.Occupier = characterModel;
+            characterModel.MoveToSpace(startSpace);
+
+            characters.Add(characterModel);
+        }
         currentOrders = SelectionType.none;
     }
 
@@ -74,7 +77,7 @@ public class Player
         }
     }
 
-    public void ClearSpaceSelection()
+    private void ClearSpaceSelection()
     {
         if (currentOrders == SelectionType.none)
         {
@@ -88,7 +91,34 @@ public class Player
         selectedSpaces = null;
     }
 
-    public void SpaceClickedMove(Space space)
+    private void ClearSelectedPlayer()
+    {
+        selectedCharacter.GetCurrentSpace().SetSelected(SelectionType.none);
+        selectedCharacter = null;
+    }
+
+    public void SpaceClickedOn(Space space)
+    {
+        if(space.Occupier != null && space.Occupier.GetType() == typeof(Character))
+        {
+            if(selectedCharacter != null)
+            {
+                selectedCharacter.GetCurrentSpace().SetSelected(SelectionType.none);
+            }
+            selectedCharacter = (Character)space.Occupier;
+            selectedCharacter.GetCurrentSpace().SetSelected(SelectionType.character);
+        }
+        else if(currentOrders == SelectionType.move)
+        {
+            SpaceClickedMove(space);
+        }
+        else if(currentOrders == SelectionType.attack)
+        {
+            SpaceClickedAttack(space);
+        }
+    }
+
+    private void SpaceClickedMove(Space space)
     {
         var path = selectedSpaces[space].Item1;
         Console.WriteLine(path.Count);
@@ -97,9 +127,10 @@ public class Player
             Move(step);
         }
         ClearSpaceSelection();
+        ClearSelectedPlayer();
     }
 
-    public void SpaceClickedAttack(Space space)
+    private void SpaceClickedAttack(Space space)
     {
         if (space.IsEmpty)
         {
@@ -122,5 +153,8 @@ public class Player
         }
 
         ClearSpaceSelection();
+        ClearSelectedPlayer();
     }
+
+   
 }

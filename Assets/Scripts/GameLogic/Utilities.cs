@@ -21,6 +21,8 @@ public static class Utilities
     public static Color SPRITE_MOVE_SELECTED = new Color(0.7f, 0.7f, 1);
     public static Color SPRITE_ATTACK_SELECTED = new Color(1, 0.7f, 0.7f);
 
+    public static Color SPRITE_CHARACTER = new Color(0.7f, 0.5f, 0.5f);
+
 
 
     public const float MAX_CAMERA_X = MAP_SIZE * TILE_SIZE;

@@ -44,6 +44,10 @@ public class SpaceController : MonoBehaviour
                 selector.color = SPRITE_ATTACK;
                 selector.enabled = true;
                 break;
+            case SelectionType.character:
+                selector.color = SPRITE_CHARACTER;
+                selector.enabled = true;
+                break;
         }
     }
 

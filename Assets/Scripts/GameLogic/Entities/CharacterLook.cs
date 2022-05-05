@@ -1,5 +1,5 @@
 ﻿using System;
 public enum CharacterLook
 {
-    Warrior
+    Warrior, Mage
 }

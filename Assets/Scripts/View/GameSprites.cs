@@ -13,6 +13,7 @@ public class GameSprites : MonoBehaviour
 
     // player characters
     public Sprite PlayerWarrior;
+    public Sprite PlayerMage;
 
     // enemies 
     public Sprite FlameSentinal;
@@ -29,6 +30,7 @@ public class GameSprites : MonoBehaviour
         Obstacles.Add(ObstacleType.Gold, Gold);
 
         CharacterLooks.Add(CharacterLook.Warrior, PlayerWarrior);
+        CharacterLooks.Add(CharacterLook.Mage, PlayerMage);
 
         Enemies.Add(EnemyType.FlameSentinal, FlameSentinal);
     }

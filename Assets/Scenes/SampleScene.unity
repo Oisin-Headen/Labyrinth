@@ -263,12 +263,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981b3a4616d5444a3871983f7865ca6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Wall: {fileID: 21300000, guid: 74571ee7d44a34320b43f662ed901863, type: 3}
+  Wall: {fileID: 21300000, guid: c486602eb83474eb7a6a8716eaf4f5ed, type: 3}
   Floor: {fileID: 21300000, guid: ca21453912780431fa8d923d44871682, type: 3}
   HardWall: {fileID: 21300000, guid: 6529c0346f8834f698dd51b6cd3b5b23, type: 3}
   Edge: {fileID: 21300000, guid: 192a746ad7bf043299de714f5bf98563, type: 3}
-  Gold: {fileID: 21300000, guid: d37bbdbe2339f460da3a1ebcc2cde272, type: 3}
+  Gold: {fileID: 21300000, guid: a957d1c5a6bdd4a999491c708e3289e6, type: 3}
   PlayerWarrior: {fileID: 21300000, guid: 88b447f5545a6424484052e5534b088e, type: 3}
+  PlayerMage: {fileID: 21300000, guid: 9d4e8e55affbc400d979b5609bed52ff, type: 3}
   FlameSentinal: {fileID: 21300000, guid: b461ac12978ab4cfbad463eea117a9e1, type: 3}
 --- !u!1 &823870875
 GameObject:

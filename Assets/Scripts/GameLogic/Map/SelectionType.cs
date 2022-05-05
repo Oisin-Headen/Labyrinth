@@ -1,5 +1,5 @@
 ﻿using System;
 public enum SelectionType
 {
-    none, move, attack
+    none, move, attack, character
 }
