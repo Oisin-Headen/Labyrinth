@@ -8,18 +8,21 @@ public class Player
     public readonly ISet<Character> characters = new HashSet<Character>();
     private Character selectedCharacter;
 
-    private SelectionType currentOrders;
+    private SelectionType currentOrders = SelectionType.none;
     private IDictionary<Space, (IList<Space>, int)> selectedSpaces = new Dictionary<Space, (IList<Space>, int)>();
 
-    private readonly GameController gameController;
+    private readonly GameManager gameManager;
     private readonly Map map;
+    private readonly PlayerController controller;
 
     // TODO this should take in the initial characters once there's a character creation menu
-    public Player(GameController gameController, Map map)
+    public Player(GameManager gameController, Map map, PlayerController controller)
     {
-        this.gameController = gameController;
+        this.gameManager = gameController;
 
         this.map = map;
+
+        this.controller = controller;
         // create the player in the middle
 
         foreach (var look in new CharacterLook[]{CharacterLook.Warrior, CharacterLook.Mage})
@@ -27,17 +30,16 @@ public class Player
             var startSpace = map.GetSpawnLocation();
 
             // TODO creating test character here
-            var characterModel = new Character(startSpace, map, look);
+            var characterModel = new Character(map, look, startSpace);
             gameController.CreateEntity(startSpace, characterModel);
             startSpace.Occupier = characterModel;
             characterModel.MoveToSpace(startSpace);
 
             characters.Add(characterModel);
         }
-        currentOrders = SelectionType.none;
     }
 
-    public void Move(Space space)
+    public void MoveSelectedCharacterTo(Space space)
     {
         if (selectedCharacter == null)
             return;
@@ -91,12 +93,13 @@ public class Player
         selectedSpaces = null;
     }
 
-    private void ClearSelectedPlayer()
+    private void ClearSelectedCharacter()
     {
         selectedCharacter.GetCurrentSpace().SetSelected(SelectionType.none);
         selectedCharacter = null;
     }
 
+    // TODO Is this the kind of thing a player should be doing?
     public void SpaceClickedOn(Space space)
     {
         if(space.Occupier != null && space.Occupier.GetType() == typeof(Character))
@@ -124,10 +127,10 @@ public class Player
         Console.WriteLine(path.Count);
         foreach (var step in path)
         {
-            Move(step);
+            MoveSelectedCharacterTo(step);
         }
         ClearSpaceSelection();
-        ClearSelectedPlayer();
+        ClearSelectedCharacter();
     }
 
     private void SpaceClickedAttack(Space space)
@@ -142,6 +145,8 @@ public class Player
             selectedCharacter.AttackValue,
             space.Occupier.Armour,
             space.Occupier.GetDamageEffectiveness(selectedCharacter.WeaponDamageType));
+
+        // TODO shouldn't be in player, should be in the occupiers themselves
         bool targetDestroyed = space.Occupier.TakeDamage(damage);
         if (targetDestroyed)
         {
@@ -153,8 +158,16 @@ public class Player
         }
 
         ClearSpaceSelection();
-        ClearSelectedPlayer();
+        ClearSelectedCharacter();
     }
 
-   
+    public void StartTurn()
+    {
+        foreach (var character in characters)
+        {
+            character.StartTurn();
+        }
+
+        controller.StartTurn();
+    }
 }

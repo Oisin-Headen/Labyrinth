@@ -1,14 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     public Player player;
-    public GameController gameController;
+    public GameManager gameManager;
+    private bool acceptingInput = false;
 
     public void Update()
     {
+        if (!acceptingInput)
+        {
+            return;
+        }
         if (Input.GetKeyUp(KeyCode.M))
         {
             player.StartSpaceSelection(SelectionType.move);
@@ -17,6 +20,16 @@ public class PlayerController : MonoBehaviour
         {
             player.StartSpaceSelection(SelectionType.attack);
         }
+        if (Input.GetKeyUp(KeyCode.Return))
+        {
+            acceptingInput = false;
+            gameManager.EndTurn();
+        }
     }
 
+
+    public void StartTurn()
+    {
+        acceptingInput = true;
+    }
 }

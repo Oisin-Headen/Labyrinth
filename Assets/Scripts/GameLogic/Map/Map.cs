@@ -12,7 +12,7 @@ public class Map
         NOT_SETUP, empty, wall, gold, hardWall, edge
     }
 
-    public Map(GameController gameController)
+    public Map(GameManager gameController, List<Enemy> enemies)
     {
         Terrain[,] setupMap =  MapGenerator.CreateMap();
         map = new Space[MAP_SIZE, MAP_SIZE];
@@ -41,7 +41,9 @@ public class Map
                 {
                     if(UnityEngine.Random.Range(1, 100) == 1)
                     {
-                        gameController.CreateEntity(map[y, x], new Enemy(this, EnemyType.FlameSentinal));
+                        Enemy newEnemy = new Enemy(this, EnemyType.FlameSentinal, space);
+                        gameController.CreateEntity(map[y, x], newEnemy);
+                        enemies.Add(newEnemy);
                     }
                 }
             }

@@ -14,10 +14,10 @@ public class Space
     public bool IsEmpty { get { return Occupier == null; } }
     public bool BlocksLOS { get { return !(IsEmpty || !Occupier.BlocksLOS); } }
 
-    private readonly GameController gameController;
+    private readonly GameManager gameController;
     private readonly ISet<IViewSpaces> viewers = new HashSet<IViewSpaces>();
 
-    public Space(Coordinate coordinates, GameController gameController)
+    public Space(Coordinate coordinates, GameManager gameController)
     {
         this.gameController = gameController;
         Coordinates = coordinates;

@@ -15,9 +15,10 @@ public abstract class AbstractEntity : IEntity
     protected Space currentSpace;
     protected readonly Map map;
 
-    public AbstractEntity(Map map)
+    public AbstractEntity(Map map, Space spawnSpace)
     {
         this.map = map;
+        this.currentSpace = spawnSpace;
     }
 
 

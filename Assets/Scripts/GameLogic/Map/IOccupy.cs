@@ -3,6 +3,7 @@ public interface IOccupy
 {
     public int Armour { get; }
     public bool BlocksLOS { get; }
+    //publi c bool 
     void SetRevealed(bool hide);
     DamageEffectiveness GetDamageEffectiveness(DamageType damageType);
 

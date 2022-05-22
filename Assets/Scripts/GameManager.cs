@@ -1,7 +1,8 @@
 using UnityEngine;
 using static Utilities;
+using System.Collections.Generic;
 
-public class GameController : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     public GameObject Tile;
     public GameObject Obstacle;
@@ -16,14 +17,35 @@ public class GameController : MonoBehaviour
     public Player Player { get; private set; }
     public Map Map { get; private set; }
 
-    // Start is called before the first frame update
+    private List<Enemy> enemies = new List<Enemy>();
+
+    private int turnCounter = 1;
+
+
+    // Start is called before the first frame update. Entry point for the game
     void Start()
     {
         // this needs to be first, since it sets up the static methods.
         Sprites.Setup();
-        Map = new Map(this);
-        Player = new Player(this, Map);
+
+        Map = new Map(this, enemies);
+        Player = new Player(this, Map, playerController);
         playerController.player = Player;
+
+        // get the ball rolling
+        Player.StartTurn();
+    }
+
+    public void EndTurn()
+    {
+        ++turnCounter;
+
+        foreach(var enemy in enemies)
+        {
+            enemy.Act();
+        }
+
+        Player.StartTurn();
     }
 
     public void CreateSpaceForModel(Coordinate coords, Space spaceModel)
@@ -39,6 +61,7 @@ public class GameController : MonoBehaviour
         return Instantiate(Obstacle, new Vector3(xPos * TILE_SIZE, yPos * TILE_SIZE), Quaternion.identity, MapHolder.transform);
     }
 
+    // helper method, not public
     private void CreateEntity(Space space, IEntity model, Sprite sprite)
     {
         var newEntity = Instantiate(Entity, new Vector3(space.Coordinates.x * TILE_SIZE, space.Coordinates.y * TILE_SIZE), Quaternion.identity);

@@ -8,10 +8,26 @@ public class Enemy : AbstractEntity, IEntity
     public override bool BlocksLOS { get { return Type.blocksLOS; } }
     public override int Armour { get { return Type.armour; } }
 
-    public Enemy(Map map, EnemyType type) : base(map)
+    public Enemy(Map map, EnemyType type, Space currentSpace) : base(map, currentSpace)
     {
         Type = type;
         Health = type.maxHealth;
+    }
+
+    public void Act()
+    {
+        //TODO change how they act depending on something
+        foreach(var space in FieldOfView.GetAllSpacesInSightRange(map, currentSpace.Coordinates, 1))
+        {
+            if(!space.IsEmpty && space.Occupier.GetType() == typeof(Character))
+            {
+                int damage = CombatCalculator.CalculateDamage(
+                    Type.attackValue,
+                    space.Occupier.Armour,
+                    space.Occupier.GetDamageEffectiveness(Type.damageType));
+                space.Occupier.TakeDamage(damage);
+            }
+        }
     }
 
     public override DamageEffectiveness GetDamageEffectiveness(DamageType damageType)

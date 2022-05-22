@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameSprites : MonoBehaviour
 {
+    private static bool setUp = false;
+
     // terrain 
     public Sprite Wall;
     public Sprite Floor;
@@ -26,6 +28,13 @@ public class GameSprites : MonoBehaviour
 
     public void Setup()
     {
+        // This method should only be called once.
+        if (setUp)
+        {
+            return;
+        }
+        setUp = true;
+
         Obstacles.Add(ObstacleType.Wall, Wall);
         Obstacles.Add(ObstacleType.Gold, Gold);
 

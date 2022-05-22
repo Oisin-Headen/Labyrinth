@@ -27,9 +27,8 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
     private int viewRange = 5;
     public readonly int AttackRange = 1;
 
-    public Character(Space space, Map map, CharacterLook look) : base(map)
+    public Character(Map map, CharacterLook look, Space spawnSpace) : base(map, spawnSpace)
     {
-        currentSpace = space;
         Look = look;
 
         //TODO do actual stats
@@ -37,6 +36,11 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
             stats = new StatBlock(3, 3, 3, 3, 3);
         else
             stats = new StatBlock(2, 2, 2, 4, 4);
+    }
+
+    public void StartTurn()
+    {
+        // TODO reset movement points, heal health and mana, etc
     }
 
     public override void MoveToSpace(Space space)
