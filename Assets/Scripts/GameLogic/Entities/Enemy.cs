@@ -32,7 +32,7 @@ public class Enemy : AbstractEntity, IEntity
 
     public override DamageEffectiveness GetDamageEffectiveness(DamageType damageType)
     {
-        return Type.suite.suite[damageType];
+        return Type.suite[damageType];
     }
 
     public override bool TakeDamage(int value)

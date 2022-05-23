@@ -53,7 +53,7 @@ public class Obstacle : IOccupy
 
     public DamageEffectiveness GetDamageEffectiveness(DamageType damageType)
     {
-        return type.suite.suite[damageType];
+        return type.suite[damageType];
     }
 
     public bool TakeDamage(int value)
@@ -61,6 +61,7 @@ public class Obstacle : IOccupy
         Health -= value;
         if (Health <= 0)
         {
+            // TODO this means this is a monocomponet... get rid of monobehaviour, make a new class to control the view
             Object.Destroy(view);
             return true;
         }

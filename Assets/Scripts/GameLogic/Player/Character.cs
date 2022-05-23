@@ -14,7 +14,7 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
 
     public override bool BlocksLOS { get { return false; } }
     public override int Armour { get { return 0; } }
-    public DamageType WeaponDamageType { get { return DamageType.Blunt; } }
+    public DamageType WeaponDamageType { get { return DamageType.Bludgeoning; } }
 
     // TODO Increase by weapon damage or something.
     public int AttackValue { get { return stats.Strength + 2; } }

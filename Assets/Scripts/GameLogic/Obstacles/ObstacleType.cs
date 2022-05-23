@@ -15,13 +15,14 @@ public class ObstacleType
         this.armour = armour;
     }
 
-    private static ResistenceVulnerabiltySuite wallResistences = new ResistenceVulnerabiltySuite(
-        sharp: DamageEffectiveness.Resistent,
-        blunt: DamageEffectiveness.Vulnerable,
-        seismic: DamageEffectiveness.Vulnerable,
-        acid: DamageEffectiveness.Vulnerable,
-        poison: DamageEffectiveness.Immune,
-        mental: DamageEffectiveness.Immune);
+    private static readonly ResistenceVulnerabiltySuite wallResistences = new ResistenceVulnerabiltySuite(
+        slashing:    DamageEffectiveness.Resistent,
+        bludgeoning: DamageEffectiveness.Vulnerable,
+        piercing:    DamageEffectiveness.Vulnerable,
+        seismic:     DamageEffectiveness.Vulnerable,
+        acid:        DamageEffectiveness.Vulnerable,
+        poison:      DamageEffectiveness.Immune,
+        mental:      DamageEffectiveness.Immune);
 
     public static ObstacleType Wall = new ObstacleType(true, wallResistences, 30, 5);
     public static ObstacleType Gold = new ObstacleType(true, wallResistences, 20, 2);
