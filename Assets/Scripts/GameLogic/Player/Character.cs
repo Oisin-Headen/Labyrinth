@@ -68,6 +68,7 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
         return DamageEffectiveness.Normal;
     }
 
+    //TODO
     public override bool TakeDamage(int value)
     {
         throw new NotImplementedException();
