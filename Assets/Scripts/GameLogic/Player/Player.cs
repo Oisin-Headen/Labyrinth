@@ -16,9 +16,9 @@ public class Player
     private readonly PlayerController controller;
 
     // TODO this should take in the initial characters once there's a character creation menu
-    public Player(GameManager gameController, Map map, PlayerController controller)
+    public Player(GameManager gameManager, Map map, PlayerController controller)
     {
-        this.gameManager = gameController;
+        this.gameManager = gameManager;
 
         this.map = map;
 
@@ -31,7 +31,7 @@ public class Player
 
             // TODO creating test character here
             var characterModel = new Character(map, look, startSpace);
-            gameController.CreateEntity(startSpace, characterModel);
+            gameManager.CreateCharacterViewFor(characterModel);
             startSpace.Occupier = characterModel;
             characterModel.MoveToSpace(startSpace);
 
@@ -71,7 +71,7 @@ public class Player
             range = selectedCharacter.AttackRange;
         }
 
-        selectedSpaces = Dijkstras.GetSpacesInRange(map, selectedCharacter.GetCurrentSpace().Coordinates, range, type==SelectionType.attack);
+        selectedSpaces = Dijkstras.GetSpacesInRange(map, selectedCharacter.GetCurrentSpace(), range, type==SelectionType.attack);
         selectedSpaces.Remove(selectedCharacter.GetCurrentSpace());
         foreach (var space in selectedSpaces.Keys)
         {
@@ -146,14 +146,12 @@ public class Player
             space.Occupier.Armour,
             space.Occupier.GetDamageEffectiveness(selectedCharacter.WeaponDamageType));
 
-        // TODO shouldn't be in player, should be in the occupiers themselves
         bool targetDestroyed = space.Occupier.TakeDamage(damage);
         if (targetDestroyed)
         {
-            space.Occupier = null;
             foreach(var character in characters)
             {
-                character.MoveToSpace(character.GetCurrentSpace());
+                character.RefreshLineOfSight();
             }
         }
 

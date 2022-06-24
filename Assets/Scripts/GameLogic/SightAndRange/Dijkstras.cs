@@ -7,16 +7,16 @@ public static class Dijkstras
 {
     private static readonly int ONE_SPACE = 10, DIAGONAL_SPACE_INCREASE = 5;
 
-    public static IDictionary<Space, (IList<Space>, int)> GetSpacesInRange(Map map, Coordinate startSpace, int maxCost, bool ignoreImpassible)
+    public static IDictionary<Space, (IList<Space>, int)> GetSpacesInRange(Map map, Space startSpace, int maxCost, bool ignoreImpassible)
     {
         // increase the max cost, to allow for the variable cost to move to diagonal spaces.
         maxCost *= 10;
 
-        var nodes = new Dictionary<Space, DijkstrasNode>();
-        var currentSpace = map.GetSpace(startSpace);
-
-        nodes.Add(currentSpace, new DijkstrasNode(currentSpace));
-        nodes[currentSpace].Visited = true;
+        var nodes = new Dictionary<Space, DijkstrasNode>
+        {
+            { startSpace, new DijkstrasNode(startSpace) }
+        };
+        nodes[startSpace].Visited = true;
 
         bool done = false;
         while(!done)
@@ -25,12 +25,15 @@ public static class Dijkstras
             var adjacentSpaces = new List<Space>();
             foreach (CardinalDirection direction in Enum.GetValues(typeof(CardinalDirection)))
             {
-                var newSpace = map.GetSpace(currentSpace.Coordinates.GetCoordinateInDirection(direction));
+                var newSpace = map.GetSpace(startSpace.Coordinates.GetCoordinateInDirection(direction));
                 if(newSpace != null && (newSpace.Occupier == null || ignoreImpassible))
                 {
                     adjacentSpaces.Add(newSpace);
                     var diagonalSpace = map.GetSpace(newSpace.Coordinates.GetCoordinateInDirection(direction.SpiralDirectionClockwise()));
-                    if(diagonalSpace != null && (diagonalSpace.Occupier == null || ignoreImpassible))
+                    var otherEdgeSpace = map.GetSpace(startSpace.Coordinates.GetCoordinateInDirection(direction.SpiralDirectionClockwise()));
+                    if (diagonalSpace != null && (
+                        (diagonalSpace.Occupier == null && (otherEdgeSpace == null || otherEdgeSpace.Occupier == null)
+                        ) || ignoreImpassible))
                     {
                         adjacentSpaces.Add(diagonalSpace);
                     }
@@ -41,9 +44,9 @@ public static class Dijkstras
             foreach (var space in adjacentSpaces)
             {
                 // get cost for this adjacent space
-                int newNodeCost = nodes[currentSpace].Cost + ONE_SPACE;
-                if (Mathf.Abs(currentSpace.Coordinates.x - space.Coordinates.x) == 1 &&
-                    Mathf.Abs(currentSpace.Coordinates.y - space.Coordinates.y) == 1)
+                int newNodeCost = nodes[startSpace].Cost + ONE_SPACE;
+                if (Mathf.Abs(startSpace.Coordinates.x - space.Coordinates.x) == 1 &&
+                    Mathf.Abs(startSpace.Coordinates.y - space.Coordinates.y) == 1)
                 {
                     // if it's a diagonal, increse the movement cost
                     newNodeCost += DIAGONAL_SPACE_INCREASE;
@@ -52,9 +55,9 @@ public static class Dijkstras
                 // never seen before, create node if the current node is below the max cost
                 if (!nodes.ContainsKey(space))
                 {
-                    if (nodes[currentSpace].Cost < maxCost)
+                    if (nodes[startSpace].Cost < maxCost)
                     {
-                        nodes.Add(space, new DijkstrasNode(space, newNodeCost, nodes[currentSpace]));
+                        nodes.Add(space, new DijkstrasNode(space, newNodeCost, nodes[startSpace]));
                     }
                 }
                 // node already exists, update it
@@ -62,7 +65,7 @@ public static class Dijkstras
                 {
                     if(!nodes[space].Visited)
                     {
-                        nodes[space].Update(newNodeCost, nodes[currentSpace]);
+                        nodes[space].Update(newNodeCost, nodes[startSpace]);
                     }
                 }
             }
@@ -92,7 +95,7 @@ public static class Dijkstras
             else
             {
                 nodes[lowestSpace].Visited = true;
-                currentSpace = lowestSpace;
+                startSpace = lowestSpace;
             }
         }
 

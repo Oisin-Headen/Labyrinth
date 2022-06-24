@@ -23,12 +23,13 @@ public static class FieldOfView
         return new Coordinate(0, 0);
     }
 
-    public static ISet<Space> GetAllSpacesInSightRange(Map tiles, Coordinate startCoordinates, int viewRange)
+    // Does not include the starting space
+    public static ISet<Space> GetAllSpacesInSightRange(Map tiles, Space startSpace, int viewRange)
     {
         ISet<Space> spaces = new HashSet<Space>();
         for (var octant = 0; octant < 8; octant++)
         {
-            spaces.UnionWith(RefreshOctant(tiles, startCoordinates, octant, viewRange));
+            spaces.UnionWith(RefreshOctant(tiles, startSpace.Coordinates, octant, viewRange));
         }
         return spaces;
     }

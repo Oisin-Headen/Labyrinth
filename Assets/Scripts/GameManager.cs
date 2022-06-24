@@ -48,18 +48,23 @@ public class GameManager : MonoBehaviour
         Player.StartTurn();
     }
 
-    public void CreateSpaceForModel(Coordinate coords, Space spaceModel)
+    public void CreateSpaceForModel(Space spaceModel)
     {
-        var spaceController = Instantiate(Tile, new Vector3(coords.x * TILE_SIZE, coords.y * TILE_SIZE), Quaternion.identity, MapHolder.transform).GetComponent<SpaceController>();
+        var spaceController = Instantiate(Tile, new Vector3(spaceModel.Coordinates.x * TILE_SIZE, spaceModel.Coordinates.y * TILE_SIZE), Quaternion.identity, MapHolder.transform).GetComponent<SpaceController>();
 
         spaceController.SetModel(spaceModel);
         spaceModel.Controller = spaceController;
     }
 
-    public GameObject CreateObstacleView(int xPos, int yPos)
+    public Obstacle CreateObstacle(Space spaceModel, ObstacleType type)
     {
-        return Instantiate(Obstacle, new Vector3(xPos * TILE_SIZE, yPos * TILE_SIZE), Quaternion.identity, MapHolder.transform);
+        var obstacleView = Instantiate(Obstacle, spaceModel.Controller.transform.position, Quaternion.identity, MapHolder.transform);
+        var obstacle = new Obstacle(obstacleView, spaceModel, type);
+        spaceModel.Occupier = obstacle;
+        return obstacle;
     }
+
+
 
     // helper method, not public
     private void CreateEntity(Space space, IEntity model, Sprite sprite)
@@ -70,14 +75,16 @@ public class GameManager : MonoBehaviour
         model.Controller = newEntity.GetComponent<EntityController>();
     }
 
-    public void CreateEntity(Space space, Character character)
+    public void CreateCharacterViewFor(Character character)
     {
-        CreateEntity(space, character, GameSprites.GetSpriteFor(character.Look));
-        space.Occupier = character;
+        CreateEntity(character.GetCurrentSpace(), character, GameSprites.GetSpriteFor(character.Look));
     }
-    public void CreateEntity(Space space, Enemy enemy)
+
+    public Enemy CreateEnemy(Space space, EnemyType enemyType)
     {
+        var enemy = new Enemy(Map, enemyType, space);
         CreateEntity(space, enemy, GameSprites.GetSpriteFor(enemy.Type));
         space.Occupier = enemy;
+        return enemy;
     }
 }

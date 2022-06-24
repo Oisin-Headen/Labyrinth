@@ -11,7 +11,7 @@ public class Map
         NOT_SETUP, empty, wall, gold, hardWall, edge
     }
 
-    public Map(GameManager gameController, List<Enemy> enemies)
+    public Map(GameManager gameManager, List<Enemy> enemies)
     {
         Terrain[,] setupMap =  MapGenerator.CreateMap();
         map = new Space[MAP_SIZE, MAP_SIZE];
@@ -22,26 +22,23 @@ public class Map
             for (int x = 0; x < MAP_SIZE; x++)
             {
                 var coords = new Coordinate(x, y);
-                var space = new Space(coords, gameController);
+                var space = new Space(coords, gameManager);
                 map[y, x] = space;
-                gameController.CreateSpaceForModel(coords, space);
+                gameManager.CreateSpaceForModel(space);
 
                 if(setupMap[y,x] == Terrain.wall)
                 {
-                    var newObject = gameController.CreateObstacleView(x, y);
-                    map[y, x].Occupier = new Obstacle(newObject, map[y, x], ObstacleType.Wall);
+                    gameManager.CreateObstacle(space, ObstacleType.Wall);
                 }
                 if (setupMap[y, x] == Terrain.gold)
                 {
-                    var newObject = gameController.CreateObstacleView(x, y);
-                    map[y, x].Occupier = new Obstacle(newObject, map[y, x], ObstacleType.Gold);
+                    gameManager.CreateObstacle(space, ObstacleType.Gold);
                 }
                 else if(setupMap[y,x] == Terrain.empty)
                 {
                     if(UnityEngine.Random.Range(1, 100) == 1)
                     {
-                        Enemy newEnemy = new Enemy(this, EnemyType.FlameSentinal, space);
-                        gameController.CreateEntity(map[y, x], newEnemy);
+                        var newEnemy = gameManager.CreateEnemy(map[y, x], EnemyType.FlameSentinal);
                         enemies.Add(newEnemy);
                     }
                 }
@@ -84,11 +81,11 @@ public class Map
         return GetSpace(coords) != null;
     }
 
-    public Space GetSpace(Coordinate currentCoords)
+    public Space GetSpace(Coordinate coords)
     {
         try
         {
-            return map[currentCoords.y, currentCoords.x];
+            return map[coords.y, coords.x];
         }
         catch (IndexOutOfRangeException)
         {
@@ -96,13 +93,13 @@ public class Map
         }
     }
 
-    public HashSet<Space> GetSpacesInRange(Coordinate startSpace, int range)
+    public HashSet<Space> GetSpacesInRange(Space startSpace, int range)
     {
         var spaces = new HashSet<Space>();
 
-        for(var y = startSpace.y - range; y < startSpace.y + range; y++)
+        for(var y = startSpace.Coordinates.y - range; y < startSpace.Coordinates.y + range; y++)
         {
-            for (var x = startSpace.x - range; x < startSpace.x + range; x++)
+            for (var x = startSpace.Coordinates.x - range; x < startSpace.Coordinates.x + range; x++)
             {
                 var space = GetSpace(new Coordinate(y, x));
                 if(space != null)

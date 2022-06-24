@@ -15,7 +15,7 @@
     public void Act()
     {
         //TODO change how they act depending on something
-        foreach(var space in FieldOfView.GetAllSpacesInSightRange(map, currentSpace.Coordinates, 1))
+        foreach(var space in FieldOfView.GetAllSpacesInSightRange(map, currentSpace, 1))
         {
             if(!space.IsEmpty && space.Occupier.GetType() == typeof(Character))
             {
@@ -40,6 +40,7 @@
         {
             // TODO, make sure this removes the controller and model as well. Might have to remove itself from lists in GameManger, once I'm keeping track of them.
             Controller.Die();
+            currentSpace.Occupier = null;
             return true;
         }
         return false;

@@ -6,6 +6,7 @@ using static Utilities;
 
 public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
 {
+    // Initilising to an empty set.
     private ISet<Space> spacesInView = new HashSet<Space>();
 
     public readonly StatBlock stats;
@@ -46,15 +47,24 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
     public override void MoveToSpace(Space space)
     {
         base.MoveToSpace(space);
-        var coords = currentSpace.Coordinates;
 
+        RefreshLineOfSight();
+    }
 
+    public void StopViewingSpaces()
+    {
         foreach (var oldSpaceInView in spacesInView)
         {
             oldSpaceInView.RemoveViewer(this);
         }
-        spacesInView = FieldOfView.GetAllSpacesInSightRange(map, coords, viewRange);
-        spacesInView.IntersectWith(Dijkstras.GetSpacesInRange(map, coords, viewRange, true).Keys);
+        spacesInView.Clear();
+    }
+
+    public void RefreshLineOfSight()
+    {
+        StopViewingSpaces();
+        spacesInView = FieldOfView.GetAllSpacesInSightRange(map, currentSpace, viewRange);
+        spacesInView.IntersectWith(Dijkstras.GetSpacesInRange(map, currentSpace, viewRange, true).Keys);
         spacesInView.Add(currentSpace);
 
         foreach (var newSpaceInView in spacesInView)
@@ -62,6 +72,7 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
             newSpaceInView.AddViewer(this);
         }
     }
+
 
     public override DamageEffectiveness GetDamageEffectiveness(DamageType damageType)
     {

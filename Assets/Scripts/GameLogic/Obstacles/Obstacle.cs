@@ -62,6 +62,7 @@ public class Obstacle : IOccupy
         if (Health <= 0)
         {
             // TODO this means this is a monocomponet... get rid of monobehaviour, make a new class to control the view
+            space.Occupier = null;
             Object.Destroy(view);
             return true;
         }
