@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public class Enemy : AbstractEntity, IEntity
+﻿public class Enemy : AbstractEntity, IEntity
 {
     public EnemyType Type { get; private set; }
     public int Health { get; private set; }
@@ -40,7 +38,8 @@ public class Enemy : AbstractEntity, IEntity
         Health -= value;
         if (Health <= 0)
         {
-            Object.Destroy(Controller.gameObject);
+            // TODO, make sure this removes the controller and model as well. Might have to remove itself from lists in GameManger, once I'm keeping track of them.
+            Controller.Die();
             return true;
         }
         return false;

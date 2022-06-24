@@ -49,21 +49,3 @@ public class ResistenceVulnerabiltySuite
         get => suite[type];
     }
 }
-
-
-// Elemental Damages
-//// Fire
-//// Cold
-//// Lightning
-//// Acid
-//// Sonic
-//// Seismic
-//// Poison
-
-// Divine/Arcane Damages
-//// Holy
-//// Infernal
-//// Mental
-//// Force
-//// Dark
-//// Death

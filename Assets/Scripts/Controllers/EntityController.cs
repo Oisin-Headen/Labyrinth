@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,5 +52,15 @@ public class EntityController : MonoBehaviour
         startTime = Time.time;
         endPos = gameObject.transform.position;
         distance = Vector2.Distance(startPos, endPos);
+    }
+
+    public void SetRevealed(bool seen)
+    {
+        gameObject.GetComponent<SpriteRenderer>().enabled = seen;
+    }
+
+    public void Die()
+    {
+        Destroy(gameObject);
     }
 }

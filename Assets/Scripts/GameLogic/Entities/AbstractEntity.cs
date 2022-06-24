@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using static Utilities;
 
 public abstract class AbstractEntity : IEntity
@@ -63,6 +62,6 @@ public abstract class AbstractEntity : IEntity
 
     public void SetRevealed(bool seen)
     {
-        Controller.GetComponent<SpriteRenderer>().enabled = seen;
+        Controller.SetRevealed(seen);
     }
 }

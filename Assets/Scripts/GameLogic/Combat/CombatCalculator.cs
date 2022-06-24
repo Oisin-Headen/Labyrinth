@@ -8,7 +8,7 @@ public static class CombatCalculator
 
         var damageValue = attack * effectiveness.GetNumericalValue() * armourReduction * damageRange / 100 / 100 / 100;
 
-
+        // Currently logs debug, will display in game eventually. TODO
         Debug.Log(string.Format("Attacked for: {0} damage. Attack: {1}. Armour Reduction: {2}. Damage Swing: {3}", damageValue, attack, armourReduction, damageRange));
 
 
