@@ -71,12 +71,18 @@ public class Player
             selectedSpaces = new Dictionary<Space, (IList<Space>, int)>();
             foreach(var space in FieldOfView.GetAllSpacesInSightRange(map, selectedCharacter.GetCurrentSpace(), selectedCharacter.AttackRange))
             {
-                selectedSpaces.Add(space, (null, 0));
+                if (space.Occupier != null)
+                {
+                    selectedSpaces.Add(space, (null, 0));
+                }
             }
         }
 
+        foreach(var chara in characters)
+        {
+            selectedSpaces.Remove(chara.GetCurrentSpace());
+        }
         
-        selectedSpaces.Remove(selectedCharacter.GetCurrentSpace());
         foreach (var space in selectedSpaces.Keys)
         {
             space.SetSelected(type);
@@ -114,6 +120,10 @@ public class Player
             }
             selectedCharacter = (Character)space.Occupier;
             selectedCharacter.GetCurrentSpace().SetSelected(SelectionType.character);
+        }
+        else if (selectedSpaces != null && !selectedSpaces.ContainsKey(space))
+        {
+            return;
         }
         else if(currentOrders == SelectionType.move)
         {
