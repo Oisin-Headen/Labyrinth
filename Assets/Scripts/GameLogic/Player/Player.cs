@@ -61,17 +61,21 @@ public class Player
         ClearSpaceSelection();
         currentOrders = type;
 
-        int range = 0;
         if (type == SelectionType.move)
         {
-            range = selectedCharacter.MoveRange;
+            selectedSpaces = Dijkstras.GetSpacesInRange(map, selectedCharacter.GetCurrentSpace(), selectedCharacter.MoveRange, false);
         }
         else if (type == SelectionType.attack)
         {
-            range = selectedCharacter.AttackRange;
+            // possibly should be using a different thing for this
+            selectedSpaces = new Dictionary<Space, (IList<Space>, int)>();
+            foreach(var space in FieldOfView.GetAllSpacesInSightRange(map, selectedCharacter.GetCurrentSpace(), selectedCharacter.AttackRange))
+            {
+                selectedSpaces.Add(space, (null, 0));
+            }
         }
 
-        selectedSpaces = Dijkstras.GetSpacesInRange(map, selectedCharacter.GetCurrentSpace(), range, type==SelectionType.attack);
+        
         selectedSpaces.Remove(selectedCharacter.GetCurrentSpace());
         foreach (var space in selectedSpaces.Keys)
         {

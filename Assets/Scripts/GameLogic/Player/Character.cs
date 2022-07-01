@@ -20,13 +20,13 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
     // TODO Increase by weapon damage or something.
     public int AttackValue { get { return stats.Strength + 2; } }
     public int MoveRange { get { return stats.Dexerity; } }
+    public int AttackRange { get; private set; }
 
 
     // TODO Characters should be expanded, with a 'Class' class.
 
     // TODO temp variables, should be put elsewhere. 'Race' and 'Weapon' classes
     private int viewRange = 5;
-    public readonly int AttackRange = 1;
 
     public Character(Map map, CharacterLook look, Space spawnSpace) : base(map, spawnSpace)
     {
@@ -34,9 +34,15 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
 
         //TODO do actual stats
         if (look == CharacterLook.Warrior)
+        {
             stats = new StatBlock(3, 3, 3, 3, 3);
+            AttackRange = 1;
+        }
         else
+        {
             stats = new StatBlock(2, 2, 2, 4, 4);
+            AttackRange = 2;
+        }
     }
 
     public void StartTurn()
