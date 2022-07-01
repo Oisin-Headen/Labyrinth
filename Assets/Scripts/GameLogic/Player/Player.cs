@@ -63,13 +63,13 @@ public class Player
 
         if (type == SelectionType.move)
         {
-            selectedSpaces = Dijkstras.GetSpacesInRange(map, selectedCharacter.GetCurrentSpace(), selectedCharacter.MoveRange, false);
+            selectedSpaces = Dijkstras.GetSpacesInRange(map, selectedCharacter.CurrentSpace, selectedCharacter.MoveRange, false);
         }
         else if (type == SelectionType.attack)
         {
             // possibly should be using a different thing for this
             selectedSpaces = new Dictionary<Space, (IList<Space>, int)>();
-            foreach(var space in FieldOfView.GetAllSpacesInSightRange(map, selectedCharacter.GetCurrentSpace(), selectedCharacter.AttackRange))
+            foreach(var space in FieldOfView.GetAllSpacesInSightRange(map, selectedCharacter.CurrentSpace, selectedCharacter.AttackRange))
             {
                 if (space.Occupier != null)
                 {
@@ -80,7 +80,7 @@ public class Player
 
         foreach(var chara in characters)
         {
-            selectedSpaces.Remove(chara.GetCurrentSpace());
+            selectedSpaces.Remove(chara.CurrentSpace);
         }
         
         foreach (var space in selectedSpaces.Keys)
@@ -105,7 +105,7 @@ public class Player
 
     private void ClearSelectedCharacter()
     {
-        selectedCharacter.GetCurrentSpace().SetSelected(SelectionType.none);
+        selectedCharacter.CurrentSpace.SetSelected(SelectionType.none);
         selectedCharacter = null;
     }
 
@@ -116,10 +116,10 @@ public class Player
         {
             if(selectedCharacter != null)
             {
-                selectedCharacter.GetCurrentSpace().SetSelected(SelectionType.none);
+                selectedCharacter.CurrentSpace.SetSelected(SelectionType.none);
             }
             selectedCharacter = (Character)space.Occupier;
-            selectedCharacter.GetCurrentSpace().SetSelected(SelectionType.character);
+            selectedCharacter.CurrentSpace.SetSelected(SelectionType.character);
         }
         else if (selectedSpaces != null && !selectedSpaces.ContainsKey(space))
         {

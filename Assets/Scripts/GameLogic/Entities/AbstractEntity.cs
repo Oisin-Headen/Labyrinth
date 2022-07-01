@@ -10,6 +10,7 @@ public abstract class AbstractEntity : IEntity
 
     public abstract bool BlocksLOS { get; }
     public abstract int Armour { get; }
+    public Space CurrentSpace { get { return currentSpace; } }
 
     protected Space currentSpace;
     protected readonly Map map;
@@ -17,7 +18,7 @@ public abstract class AbstractEntity : IEntity
     public AbstractEntity(Map map, Space spawnSpace)
     {
         this.map = map;
-        this.currentSpace = spawnSpace;
+        currentSpace = spawnSpace;
     }
 
 
@@ -53,11 +54,6 @@ public abstract class AbstractEntity : IEntity
         currentSpace.Occupier = null;
         currentSpace = space;
         currentSpace.Occupier = this;
-    }
-
-    public Space GetCurrentSpace()
-    {
-        return currentSpace;
     }
 
     public void SetRevealed(bool seen)

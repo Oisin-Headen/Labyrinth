@@ -15,17 +15,7 @@
     public void Act()
     {
         //TODO change how they act depending on something
-        foreach(var space in FieldOfView.GetAllSpacesInSightRange(map, currentSpace, 1))
-        {
-            if(!space.IsEmpty && space.Occupier.GetType() == typeof(Character))
-            {
-                int damage = CombatCalculator.CalculateDamage(
-                    Type.attackValue,
-                    space.Occupier.Armour,
-                    space.Occupier.GetDamageEffectiveness(Type.damageType));
-                space.Occupier.TakeDamage(damage);
-            }
-        }
+        
     }
 
     public override DamageEffectiveness GetDamageEffectiveness(DamageType damageType)

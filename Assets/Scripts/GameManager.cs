@@ -18,8 +18,10 @@ public class GameManager : MonoBehaviour
     public Map Map { get; private set; }
 
     private List<Enemy> enemies = new List<Enemy>();
+    private List<IEnemyAI> enemyAIs = new List<IEnemyAI>();
 
     private int turnCounter = 1;
+    private bool playerTurn = true;
 
 
     // Start is called before the first frame update. Entry point for the game
@@ -29,6 +31,11 @@ public class GameManager : MonoBehaviour
         Sprites.Setup();
 
         Map = new Map(this, enemies);
+
+        var sentinal = new SentinalAI(Map);
+        sentinal.AddEnemies(enemies);
+        enemyAIs.Add(sentinal);
+
         Player = new Player(this, Map, playerController);
         playerController.player = Player;
 
@@ -39,14 +46,39 @@ public class GameManager : MonoBehaviour
     public void EndTurn()
     {
         ++turnCounter;
+        playerTurn = false;
 
-        foreach(var enemy in enemies)
+        foreach(var enemyAI in enemyAIs)
         {
-            enemy.Act();
+            enemyAI.Act();
         }
+    }
 
+    public void StartTurn()
+    {
+        playerTurn = true;
         Player.StartTurn();
     }
+
+
+
+    public void Update()
+    {
+        if(!playerTurn)
+        {
+            var nextAITask = enemyAIs[0].CompletedTask();
+            while(nextAITask != null)
+            {
+                nextAITask.Wait();
+                nextAITask = enemyAIs[0].CompletedTask();
+            }
+            if(!enemyAIs[0].TasksRemaining())
+            {
+                StartTurn();
+            }
+        }
+    }
+
 
     public void CreateSpaceForModel(Space spaceModel)
     {
@@ -77,7 +109,7 @@ public class GameManager : MonoBehaviour
 
     public void CreateCharacterViewFor(Character character)
     {
-        CreateEntity(character.GetCurrentSpace(), character, GameSprites.GetSpriteFor(character.Look));
+        CreateEntity(character.CurrentSpace, character, GameSprites.GetSpriteFor(character.Look));
     }
 
     public Enemy CreateEnemy(Space space, EnemyType enemyType)
