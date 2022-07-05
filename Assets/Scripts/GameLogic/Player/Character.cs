@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using static Utilities;
 
-public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
+public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces, ICharacterObservable
 {
     // Initilising to an empty set.
     private ISet<Space> spacesInView = new HashSet<Space>();
+    private ISet<IObserveCharacters> observerList = new HashSet<IObserveCharacters>();
+
 
     public readonly StatBlock stats;
 
@@ -18,9 +20,12 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
     public DamageType WeaponDamageType { get { return DamageType.Bludgeoning; } }
 
     // TODO Increase by weapon damage or something.
-    public int AttackValue { get { return stats.Strength + 2; } }
-    public int MoveRange { get { return stats.Dexerity; } }
+    public int AttackValue { get; private set; }
     public int AttackRange { get; private set; }
+
+    public int MoveRange { get; private set; }
+    public int RemainingMovement { get; private set; }
+
 
 
     // TODO Characters should be expanded, with a 'Class' class.
@@ -35,25 +40,43 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
         //TODO do actual stats
         if (look == CharacterLook.Warrior)
         {
-            stats = new StatBlock(3, 3, 3, 3, 3);
-            AttackRange = 1;
+            stats = new StatBlock(5, 3, 3, 3, 3, 3);
+            observerList.Add(new BasicWeapon("Hammer", 2));
         }
         else
         {
-            stats = new StatBlock(2, 2, 2, 4, 4);
-            AttackRange = 2;
+            stats = new StatBlock(2, 2, 2, 4, 4, 4);
+            observerList.Add(new BasicWeapon("Mage Staff", 0, 2));
+        }
+        StartTurn();
+    }
+
+    private void CalculateFromStats()
+    {
+        MoveRange = stats.Dexerity;
+        AttackValue = stats.Strength;
+        AttackRange = 1;
+        foreach(var observer in observerList)
+        {
+            var changes = observer.WhenCalculatingFromStats();
+            MoveRange += changes.moveAddition;
+            AttackValue += changes.attackAddition;
+            AttackRange += changes.attackRangeAddition;
         }
     }
+
 
     public void StartTurn()
     {
         // TODO reset movement points, heal health and mana, etc
+        CalculateFromStats();
+
+        RemainingMovement = MoveRange;
     }
 
     public override void MoveToSpace(Space space)
     {
         base.MoveToSpace(space);
-
         RefreshLineOfSight();
     }
 
@@ -89,5 +112,15 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces
     public override bool TakeDamage(int value)
     {
         throw new NotImplementedException();
+    }
+
+    public void AddObserver(IObserveCharacters newObserver)
+    {
+        observerList.Add(newObserver);
+    }
+
+    public void RemoveObserver(IObserveCharacters observer)
+    {
+        observerList.Remove(observer);
     }
 }

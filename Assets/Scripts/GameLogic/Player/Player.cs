@@ -63,7 +63,7 @@ public class Player
 
         if (type == SelectionType.move)
         {
-            selectedSpaces = Dijkstras.GetSpacesInRange(map, selectedCharacter.CurrentSpace, selectedCharacter.MoveRange, false);
+            selectedSpaces = Dijkstras.GetSpacesInRange(map, selectedCharacter.CurrentSpace, selectedCharacter.RemainingMovement, false);
         }
         else if (type == SelectionType.attack)
         {

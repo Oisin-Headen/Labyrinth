@@ -30,11 +30,12 @@ public class SentinalAI : IEnemyAI
                 {
                     if (!space.IsEmpty && space.Occupier.GetType() == typeof(Character))
                     {
-                        int damage = CombatCalculator.CalculateDamage(
-                            enemy.Type.attackValue,
-                            space.Occupier.Armour,
-                            space.Occupier.GetDamageEffectiveness(enemy.Type.damageType));
-                        space.Occupier.TakeDamage(damage);
+                        // TODO this should be a list of actions returned to the main thread, to be excuted there.
+                        //int damage = CombatCalculator.CalculateDamage(
+                        //    enemy.Type.attackValue,
+                        //    space.Occupier.Armour,
+                        //    space.Occupier.GetDamageEffectiveness(enemy.Type.damageType));
+                        //space.Occupier.TakeDamage(damage);
                     }
                 }
             }));
