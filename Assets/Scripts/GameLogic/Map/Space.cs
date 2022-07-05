@@ -13,6 +13,13 @@ public class Space
     public bool IsEmpty { get { return Occupier == null; } }
     public bool BlocksLOS { get { return !(IsEmpty || !Occupier.BlocksLOS); } }
 
+    public int MovementCost { get
+        {
+            //TODO check for terrain modifiers.
+            return 1;
+        }
+    }
+
     private readonly GameManager gameController;
     private readonly ISet<IViewSpaces> viewers = new HashSet<IViewSpaces>();
 

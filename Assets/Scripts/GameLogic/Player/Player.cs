@@ -138,6 +138,7 @@ public class Player
     private void SpaceClickedMove(Space space)
     {
         var path = selectedSpaces[space].Item1;
+        var cost = selectedSpaces[space].Item2;
         Console.WriteLine(path.Count);
         foreach (var step in path)
         {
@@ -175,6 +176,7 @@ public class Player
 
     public void StartTurn()
     {
+        ClearSpaceSelection();
         foreach (var character in characters)
         {
             character.StartTurn();

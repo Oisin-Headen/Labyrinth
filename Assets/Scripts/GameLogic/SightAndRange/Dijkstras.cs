@@ -5,13 +5,10 @@ using static Utilities;
 
 public static class Dijkstras
 {
-    private static readonly int ONE_SPACE = 10, DIAGONAL_SPACE_INCREASE = 5;
+    public static readonly int ONE_SPACE = 10, DIAGONAL_SPACE_INCREASE = 5;
 
     public static IDictionary<Space, (IList<Space>, int)> GetSpacesInRange(Map map, Space startSpace, int maxCost, bool ignoreImpassible)
     {
-        // increase the max cost, to allow for the variable cost to move to diagonal spaces.
-        maxCost *= 10;
-
         var nodes = new Dictionary<Space, DijkstrasNode>
         {
             { startSpace, new DijkstrasNode(startSpace) }
@@ -44,7 +41,7 @@ public static class Dijkstras
             foreach (var space in adjacentSpaces)
             {
                 // get cost for this adjacent space
-                int newNodeCost = nodes[startSpace].Cost + ONE_SPACE;
+                int newNodeCost = nodes[startSpace].Cost + (ONE_SPACE * space.MovementCost);
                 if (Mathf.Abs(startSpace.Coordinates.x - space.Coordinates.x) == 1 &&
                     Mathf.Abs(startSpace.Coordinates.y - space.Coordinates.y) == 1)
                 {
@@ -102,7 +99,7 @@ public static class Dijkstras
         var returnValue = new Dictionary<Space, (IList<Space>, int)>();
         foreach(KeyValuePair<Space, DijkstrasNode> pair in nodes)
         {
-            returnValue.Add(pair.Key, (pair.Value.GetPath(), pair.Value.Cost));
+            returnValue.Add(pair.Key, (pair.Value.GetPath(), pair.Value.Cost / ONE_SPACE));
         }
 
         return returnValue;

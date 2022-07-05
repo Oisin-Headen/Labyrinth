@@ -20,18 +20,17 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces, ICharact
     public DamageType WeaponDamageType { get { return DamageType.Bludgeoning; } }
 
     // TODO Increase by weapon damage or something.
-    public int AttackValue { get; private set; }
-    public int AttackRange { get; private set; }
+    private ExtraCharacterStatistics extraStats;
 
-    public int MoveRange { get; private set; }
-    public int RemainingMovement { get; private set; }
-
+    public int AttackValue { get { return extraStats.AttackValue; } }
+    public int AttackRange { get { return extraStats.AttackRange; } }
+    public int RemainingMovement { get { return extraStats.RemainingMovement; } }
 
 
     // TODO Characters should be expanded, with a 'Class' class.
 
     // TODO temp variables, should be put elsewhere. 'Race' and 'Weapon' classes
-    private int viewRange = 5;
+    private int viewRange = 5 * Dijkstras.ONE_SPACE;
 
     public Character(Map map, CharacterLook look, Space spawnSpace) : base(map, spawnSpace)
     {
@@ -41,42 +40,43 @@ public class Character : AbstractEntity, IOccupy, IEntity, IViewSpaces, ICharact
         if (look == CharacterLook.Warrior)
         {
             stats = new StatBlock(5, 3, 3, 3, 3, 3);
-            observerList.Add(new BasicWeapon("Hammer", 2));
+            observerList.Add(new BasicWeapon("Hammer", 5));
         }
         else
         {
             stats = new StatBlock(2, 2, 2, 4, 4, 4);
-            observerList.Add(new BasicWeapon("Mage Staff", 0, 2));
+            observerList.Add(new BasicWeapon("Mage Staff", 2, 2));
         }
+        CalculateFromStats();
         StartTurn();
     }
 
     private void CalculateFromStats()
     {
-        MoveRange = stats.Dexerity;
-        AttackValue = stats.Strength;
-        AttackRange = 1;
+        extraStats = new ExtraCharacterStatistics(stats);
+
         foreach(var observer in observerList)
         {
-            var changes = observer.WhenCalculatingFromStats();
-            MoveRange += changes.moveAddition;
-            AttackValue += changes.attackAddition;
-            AttackRange += changes.attackRangeAddition;
+            observer.WhenCalculatingFromStats(extraStats);
         }
+
+        // TODO, you know, maybe this isn't the place to be doing this, but we need to keep track of fractional moves.
+        extraStats.MoveRange *= Dijkstras.ONE_SPACE;
     }
 
 
     public void StartTurn()
     {
         // TODO reset movement points, heal health and mana, etc
-        CalculateFromStats();
 
-        RemainingMovement = MoveRange;
+
+        extraStats.RemainingMovement = extraStats.MoveRange;
     }
 
     public override void MoveToSpace(Space space)
     {
         base.MoveToSpace(space);
+        extraStats.RemainingMovement -= space.MovementCost * Dijkstras.ONE_SPACE;
         RefreshLineOfSight();
     }
 

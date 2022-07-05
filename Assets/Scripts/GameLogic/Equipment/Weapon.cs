@@ -11,9 +11,9 @@ public class BasicWeapon: IObserveCharacters
         this.rangeIncrease = rangeIncrease;
     }
 
-
-    public CalculateFromStatsReturn WhenCalculatingFromStats()
+    public void WhenCalculatingFromStats(ExtraCharacterStatistics extraStats)
     {
-        return new CalculateFromStatsReturn(attackAddition: attackIncrease, attackRangeAddition: rangeIncrease);
+        extraStats.AttackValue += attackIncrease;
+        extraStats.AttackRange += rangeIncrease;
     }
 }
