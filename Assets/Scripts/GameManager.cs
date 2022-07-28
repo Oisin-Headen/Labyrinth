@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
 
     public void EndTurn()
     {
+        Player.EndTurn();
         ++turnCounter;
         playerTurn = false;
 

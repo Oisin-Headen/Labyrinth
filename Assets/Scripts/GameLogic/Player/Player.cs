@@ -105,8 +105,11 @@ public class Player
 
     private void ClearSelectedCharacter()
     {
-        selectedCharacter.CurrentSpace.SetSelected(SelectionType.none);
-        selectedCharacter = null;
+        if (selectedCharacter != null)
+        {
+            selectedCharacter.CurrentSpace.SetSelected(SelectionType.none);
+            selectedCharacter = null;
+        }
     }
 
     // TODO Is this the kind of thing a player should be doing?
@@ -176,12 +179,17 @@ public class Player
 
     public void StartTurn()
     {
-        ClearSpaceSelection();
         foreach (var character in characters)
         {
             character.StartTurn();
         }
 
         controller.StartTurn();
+    }
+
+    public void EndTurn()
+    {
+        ClearSpaceSelection();
+        ClearSelectedCharacter();
     }
 }
